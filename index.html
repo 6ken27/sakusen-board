@@ -291,7 +291,7 @@ function snapshot(lag){ // lag秒前の状態
   if(!h){const off={};for(const k in S_.off)off[k]=S_.off[k].p;return {off,ball:ballPos(),holder:S_.ball.holder,fl:S_.ball.fl}}
   return h;
 }
-function ballPos(){const b=S.ball;if(b.fl){const f=b.fl;const t=clamp((S.t-f.t0)/f.dur,0,1);const to=f.to==='HOOP'?HOOP:S.off[f.to].p;return lerpV(f.from,to,t)}return S.off[b.holder].p}
+function ballPos(){const b=S.ball;if(b.fl){const f=b.fl;const t=clamp((S.t-f.t0)/f.dur,0,1);const to=f.to==='HOOP'?HOOP:S.off[f.to].p;return lerpV(f.from,to,t)}return b.holder&&S.off[b.holder]?S.off[b.holder].p:HOOP}
 function rec(){const off={};for(const k in S.off)off[k]=V(S.off[k].p.x,S.off[k].p.y);S.hist.push({t:S.t,off,ball:ballPos(),holder:S.ball.holder,fl:S.ball.fl});if(S.hist.length>90)S.hist.shift()}
 function holderOf(snap){return snap.fl?snap.fl.to:snap.holder}
 // --- マンツーの立ち位置 ---
