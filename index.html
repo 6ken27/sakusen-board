@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#14161b">
+<meta name="theme-color" content="#0E1116">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -11,690 +11,567 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="作戦ボード">
-<title>うごく作戦ボード｜要望を書くと、守備のズレまで再現してバスケの戦術を動かす</title>
-<meta name="description" content="「シューターを空けたい」「ゾーンを崩したい」など要望を書くと、5人制・3x3の戦術を作戦ボードで再生。守備のヘルプやスクリーンのズレを再現し、パス・シュートの判断まで見せる無料ツール。">
+<title>うごく作戦ボード｜バスケットボールの戦術シミュレーター</title>
+<meta name="description" content="28の戦術を守備の対応つきで再生。自分で作った作戦も、ドロップ・スイッチ・ブリッツなどの守備に当てて60回試せるバスケットボールの作戦ボード。">
 <style>
-:root{--bg:#14161b;--card:#1e2128;--line:#2c3039;--ink:#f3efe6;--sub:#a29d94;--acc:#ff6a3d;--gold:#f2c14e;--board:#1d4a39;--frame:#7a5230}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:"Meiryo UI","Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7}
-header{padding:22px 20px 8px;max-width:1220px;margin:0 auto}
-header .kicker{color:var(--acc);font-weight:700;font-size:13px;letter-spacing:.12em}
-header h1{margin:2px 0 4px;font-size:clamp(22px,3.4vw,32px)}
-header p{margin:0;color:var(--sub);font-size:14px}
-main{max-width:1220px;margin:0 auto;padding:12px 20px 40px;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.25fr);gap:22px;align-items:start}
-@media(max-width:900px){main{grid-template-columns:1fr}}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
-label.t{display:block;font-weight:700;margin-bottom:6px}
-textarea{width:100%;min-height:88px;resize:vertical;background:#111318;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:12px;font:inherit;font-size:15px}
-textarea:focus{outline:2px solid var(--acc);border-color:transparent}
-.ex{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 4px}
-.ex button{background:#111318;border:1px solid var(--line);color:var(--sub);border-radius:999px;padding:4px 11px;font:inherit;font-size:12.5px;cursor:pointer}
-.ex button:hover{color:var(--ink);border-color:var(--sub)}
-.row{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px}
-.seg{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
-.seg button{background:transparent;border:0;color:var(--sub);padding:6px 12px;font:inherit;font-size:13.5px;cursor:pointer}
-.seg button.on{background:var(--ink);color:#111}
-.small{font-size:12px;color:var(--sub);display:block;margin-bottom:4px}
-.go{margin-top:14px;width:100%;background:var(--acc);color:#fff;border:0;border-radius:10px;padding:12px;font:inherit;font-weight:700;font-size:16px;cursor:pointer}
-.read{margin-top:14px;font-size:13.5px;color:var(--sub)}
-.tag{display:inline-block;background:#2a2e37;color:var(--gold);border-radius:6px;padding:1px 8px;margin:2px 4px 2px 0;font-size:12.5px}
-.cands{display:flex;flex-direction:column;gap:8px;margin-top:10px}
-.cand{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#111318;border:1px solid var(--line);border-radius:10px;padding:9px 12px;cursor:pointer;text-align:left;color:var(--ink);font:inherit}
-.cand.on{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc) inset}
-.cand b{font-size:14.5px}.cand small{color:var(--sub);font-size:12px}
-.cand .m{font-size:11px;color:#111;background:var(--gold);border-radius:5px;padding:0 6px;white-space:nowrap}
-.boardwrap{background:var(--frame);border-radius:16px;padding:12px;box-shadow:0 10px 30px rgba(0,0,0,.45),inset 0 0 0 3px #5e3d22;position:relative}
-svg#board{display:block;width:100%;height:auto;background:var(--board);border-radius:8px}
-.toast{position:absolute;left:24px;right:24px;top:22px;background:rgba(10,12,16,.82);border-left:4px solid var(--gold);border-radius:8px;padding:7px 12px;font-size:14px;font-weight:700;opacity:0;transition:opacity .25s;pointer-events:none}
-.toast.on{opacity:1}
-.ctrl{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0 4px}
-.ctrl button{background:var(--ink);color:#111;border:0;border-radius:9px;padding:7px 14px;font:inherit;font-weight:700;font-size:14px;cursor:pointer}
-.ctrl button.sec{background:#2a2e37;color:var(--ink)}
-.ctrl label{font-size:13px;color:var(--sub);display:flex;align-items:center;gap:5px}
-.ctrl .sp{margin-left:auto}
-.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:#e9e4d8;margin-top:8px}
+:root{
+  --bg:#0E1116;--bg2:#131820;--surf:#1A2029;--surf2:#212834;--line:rgba(236,231,220,.08);--line2:rgba(236,231,220,.15);
+  --ink:#ECE7DC;--sub:#8D929B;--faint:#555B66;--acc:#E6B566;--accD:#B98C46;--def:#7EA6D8;--warn:#E28B70;
+  --sans:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI","Meiryo UI",system-ui,sans-serif;
+  --num:"SF Pro Display",-apple-system,"Segoe UI","Helvetica Neue",Roboto,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;letter-spacing:.01em;-webkit-font-smoothing:antialiased;overscroll-behavior-y:none}
+button,input,textarea,select{font:inherit;color:inherit}
+button{border:0;background:none;cursor:pointer;padding:0}
+svg{display:block}
+.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.num{font-family:var(--num);font-variant-numeric:tabular-nums}
+.tk{font-family:var(--num)}
+
+/* ---------- 枠 ---------- */
+.bar{position:sticky;top:0;z-index:20;background:rgba(14,17,22,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top)}
+.bar-in{max-width:1280px;margin:0 auto;height:54px;display:flex;align-items:center;gap:24px;padding:0 20px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15.5px;letter-spacing:.06em;white-space:nowrap}
+.brand svg{width:22px;height:22px;color:var(--acc)}
+.tabs{display:flex;gap:4px;margin-left:8px}
+.tabs button{padding:7px 14px;border-radius:9px;font-size:13.5px;color:var(--sub);font-weight:600}
+.tabs button.on{color:var(--ink);background:var(--surf)}
+.bar .sp{flex:1}
+.bar .install{display:none;font-size:12.5px;color:var(--acc);font-weight:600;padding:6px 10px;border:1px solid rgba(230,181,102,.35);border-radius:8px}
+.bar .install.on{display:block}
+main{max-width:1280px;margin:0 auto;padding:0 20px 60px}
+.view{display:none}.view.on{display:block;animation:fi .25s ease}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+.bnav{display:none}
+@media(max-width:899px){
+  .tabs{display:none}
+  .bar-in{height:50px;padding:0 16px}
+  main{padding:0 14px calc(84px + env(safe-area-inset-bottom))}
+  .bnav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(14,17,22,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:6px 0 calc(6px + env(safe-area-inset-bottom))}
+  .bnav button{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;color:var(--faint);padding:4px 0;font-weight:600}
+  .bnav button .ic{width:22px;height:22px}
+  .bnav button.on{color:var(--ink)}
+  .bnav button.on .ic{color:var(--acc)}
+}
+
+/* ---------- 作戦集 ---------- */
+.libhead{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:26px 0 14px}
+.libhead h1{font-size:22px;margin:0;letter-spacing:.02em}
+.libhead small{color:var(--sub);font-size:12.5px}
+.search{display:flex;align-items:center;gap:10px;background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:0 14px;height:46px}
+.search:focus-within{border-color:var(--line2)}
+.search .ic{color:var(--sub);width:18px;height:18px}
+.search input{flex:1;background:none;border:0;outline:0;font-size:14.5px;min-width:0}
+.search input::placeholder{color:var(--faint)}
+.search .x{color:var(--sub);display:none}.search.has .x{display:block}
+.chips{display:flex;gap:6px;overflow-x:auto;margin:12px -20px 0;padding:0 20px 2px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chips button{flex:none;padding:6px 12px;border-radius:999px;border:1px solid var(--line);font-size:12.5px;color:var(--sub);white-space:nowrap}
+.chips button b{font-family:var(--num);font-weight:500;margin-left:5px;color:var(--faint)}
+.chips button.on{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:600}
+.chips button.on b{color:rgba(14,17,22,.55)}
+.qhint{font-size:12px;color:var(--sub);margin-top:10px;min-height:0}
+.qhint span{color:var(--acc)}
+.list{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:10px;margin-top:14px}
+.row{display:flex;align-items:center;gap:14px;padding:12px;border-radius:14px;background:var(--bg2);border:1px solid var(--line);text-align:left;width:100%;transition:border-color .2s,background .2s}
+.row:hover{border-color:var(--line2);background:var(--surf)}
+.row .th{width:84px;height:58px;border-radius:8px;overflow:hidden;flex:none;background:#1b2028}
+.row .th svg{width:100%;height:100%}
+.row .tx{flex:1;min-width:0}
+.row .nm{font-size:14.5px;font-weight:700;display:flex;align-items:center;gap:8px}
+.row .sb{font-size:12px;color:var(--sub);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .ct{font-size:10.5px;color:var(--acc);font-weight:600;letter-spacing:.04em}
+.row .chev{color:var(--faint);width:16px;height:16px}
+.row .best{font-size:10.5px;color:var(--bg);background:var(--acc);border-radius:4px;padding:0 5px;font-weight:700}
+.note{color:var(--faint);font-size:11.5px;margin-top:28px;line-height:1.7}
+.empty{padding:40px 10px;text-align:center;color:var(--sub);font-size:13.5px}
+.empty button{margin-top:12px}
+
+/* ---------- 再生画面 ---------- */
+.ph{display:flex;align-items:center;gap:12px;margin:18px 0 14px}
+.ph .back{width:36px;height:36px;border-radius:10px;border:1px solid var(--line);display:grid;place-items:center;color:var(--sub);flex:none}
+.ph .back:hover{color:var(--ink);border-color:var(--line2)}
+.ph .tt{flex:1;min-width:0}
+.ph .tt small{display:block;font-size:11px;color:var(--acc);font-weight:600;letter-spacing:.04em}
+.ph h1{font-size:20px;margin:0;line-height:1.35;letter-spacing:.02em}
+.ph .sb{font-size:12.5px;color:var(--sub)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:38px;padding:0 14px;border-radius:10px;border:1px solid var(--line2);font-size:13px;font-weight:600;white-space:nowrap}
+.btn:hover{background:var(--surf)}
+.btn .ic{width:17px;height:17px}
+.btn.fill{background:var(--acc);border-color:var(--acc);color:#1b1407}
+.btn.fill:hover{background:var(--accD)}
+.btn.sm{height:32px;padding:0 11px;font-size:12.5px}
+.stage{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(320px,1fr);gap:20px;align-items:start}
+@media(max-width:899px){.stage{grid-template-columns:1fr;gap:14px}.ph{margin:12px 0 10px}.ph h1{font-size:18px}}
+.board{position:relative;border-radius:14px;overflow:hidden;background:#151a21;border:1px solid var(--line);touch-action:none}
+.board svg{width:100%;height:auto}
+@media(min-width:900px){.board svg{max-height:calc(100vh - 250px)}#eboard svg{max-height:calc(100vh - 330px)}}
+.toast{position:absolute;left:12px;bottom:12px;max-width:calc(100% - 24px);background:rgba(14,17,22,.86);border:1px solid var(--line2);border-left:3px solid var(--def);border-radius:8px;padding:6px 11px;font-size:13px;font-weight:600;opacity:0;transform:translateY(-4px);transition:opacity .2s,transform .2s;pointer-events:none}
+.toast.on{opacity:1;transform:none}
+.toast.l1{border-left-color:var(--warn)}.toast.l2{border-left-color:var(--acc)}
+.rescard{position:absolute;left:12px;right:12px;bottom:12px;background:rgba(14,17,22,.9);border:1px solid var(--line2);border-radius:12px;padding:10px 14px;display:none;align-items:center;gap:16px}
+.rescard.on{display:flex}
+.rescard .k{flex:1;min-width:0}
+.rescard .k b{display:block;font-size:14px}
+.rescard .k small{color:var(--sub);font-size:12px}
+.rescard .v{text-align:right}
+.rescard .v b{font-family:var(--num);font-weight:500;font-size:22px;line-height:1}
+.rescard .v small{display:block;color:var(--sub);font-size:10.5px}
+.transport{display:flex;align-items:center;gap:12px;margin-top:12px}
+.pbtn{width:42px;height:42px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;flex:none}
+.pbtn svg{width:16px;height:16px;fill:currentColor}
+.ibtn{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;color:var(--sub);flex:none}
+.ibtn:hover{color:var(--ink);background:var(--surf)}
+.track{flex:1;height:30px;position:relative;cursor:pointer;touch-action:none}
+.track .rail{position:absolute;left:0;right:0;top:13px;height:4px;border-radius:2px;background:var(--surf2)}
+.track .fill{position:absolute;left:0;top:13px;height:4px;border-radius:2px;background:var(--ink)}
+.track .mk{position:absolute;top:9px;width:2px;height:12px;border-radius:1px;background:var(--acc);margin-left:-1px}
+.track .mk.l1{background:var(--warn);height:8px;top:11px}
+.track .knob{position:absolute;top:8px;width:14px;height:14px;border-radius:50%;background:var(--ink);margin-left:-7px;box-shadow:0 0 0 4px rgba(236,231,220,.12)}
+.tm{font-size:12px;color:var(--sub);min-width:76px;text-align:right}
+.speed{display:flex;border:1px solid var(--line);border-radius:9px;padding:2px}
+.speed button{padding:4px 7px;font-size:11.5px;color:var(--sub);border-radius:7px;font-family:var(--num)}
+.speed button.on{background:var(--surf2);color:var(--ink)}
+.defbar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:8px;margin-top:12px;align-items:end}
+.fld small{display:block;font-size:10.5px;color:var(--sub);margin:0 0 4px 2px}
+select{width:100%;height:36px;background:var(--surf);border:1px solid var(--line);border-radius:9px;padding:0 28px 0 10px;font-size:13px;color-scheme:dark;appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238D929B' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;background-size:14px}
+select:disabled{opacity:.5}
+@media(max-width:560px){
+  .defbar{grid-template-columns:repeat(3,minmax(0,1fr))}.defbar .again{grid-column:span 3;height:40px}
+  select{font-size:12.5px;padding:0 22px 0 9px;background-position:right 6px center}
+  .transport{flex-wrap:wrap;gap:8px 10px}.track{order:-1;flex:0 0 100%;height:26px}.track .rail,.track .fill{top:11px}.track .mk{top:7px}.track .mk.l1{top:9px}.track .knob{top:6px}
+  .tm{min-width:0;flex:1;text-align:left}
+  .toast{left:8px;bottom:8px;font-size:12px;padding:5px 9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:calc(100% - 16px)}
+  .rescard{left:8px;right:8px;bottom:8px;padding:8px 12px}.rescard .k b{font-size:13px}.rescard .v b{font-size:19px}
+  .legend{gap:6px 12px}
+}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:12px;font-size:11.5px;color:var(--sub)}
 .legend span{display:flex;align-items:center;gap:6px}
-.pattern{font-size:13px;color:var(--sub);margin-top:6px}
-h2{font-size:21px;margin:14px 0 2px}
-.lead{color:var(--sub);margin:0 0 10px;font-size:14px}
-ol.steps{padding-left:0;list-style:none;margin:8px 0;counter-reset:s}
-ol.steps li{counter-increment:s;position:relative;padding:7px 10px 7px 42px;border-radius:9px;margin-bottom:3px;font-size:14px}
-ol.steps li::before{content:counter(s);position:absolute;left:10px;top:8px;width:23px;height:23px;border-radius:50%;background:#2a2e37;color:var(--ink);font-size:12.5px;display:grid;place-items:center;font-weight:700}
-ol.steps li.on{background:#2a2e37}ol.steps li.on::before{background:var(--acc)}
-.box{background:#111318;border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-top:10px;font-size:14px}
-.box h3{margin:0 0 4px;font-size:14px;color:var(--gold)}
-.box ul{margin:0;padding-left:1.1em}
-#log li{margin-bottom:3px}#log .tm{color:var(--sub);font-size:12px;margin-right:6px;font-variant-numeric:tabular-nums}
-#log li.dec{color:var(--gold);font-weight:700}
-.share{font-size:12.5px;color:var(--sub);margin-top:8px;word-break:break-all}
-.share button{background:#2a2e37;color:var(--ink);border:0;border-radius:7px;padding:3px 10px;font:inherit;font-size:12.5px;cursor:pointer;margin-left:6px}
-@media(max-width:600px){header{padding:14px 14px 4px}main{padding:8px 12px 30px;gap:14px}.card{padding:14px}.boardwrap{padding:7px;border-radius:12px}.toast{left:12px;right:12px;top:12px;font-size:13px}.ctrl button{padding:7px 11px;font-size:13px}.ctrl .sp{margin-left:0}}
-body{padding-bottom:env(safe-area-inset-bottom)}
-#install{display:none;margin-top:10px;width:100%;background:#2a2e37;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:9px;font:inherit;font-size:14px;cursor:pointer}
-footer{max-width:1220px;margin:0 auto;padding:0 20px 30px;color:var(--sub);font-size:12px}
+.panel{background:var(--bg2);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.ptabs{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--line)}
+.ptabs button{padding:12px 0;font-size:13px;color:var(--sub);font-weight:600;position:relative}
+.ptabs button.on{color:var(--ink)}
+.ptabs button.on::after{content:"";position:absolute;left:28%;right:28%;bottom:-1px;height:2px;background:var(--acc);border-radius:2px}
+.pane{display:none;padding:14px 16px 18px;max-height:640px;overflow:auto}
+.pane.on{display:block}
+@media(max-width:899px){.pane{max-height:none}}
+.flow{list-style:none;margin:0;padding:0}
+.flow li{display:flex;gap:12px;padding:7px 8px;border-radius:8px;font-size:13px;color:var(--sub);cursor:pointer;line-height:1.5}
+.flow li:hover{background:var(--surf)}
+.flow li .t{font-family:var(--num);font-size:11.5px;color:var(--faint);min-width:34px;padding-top:1px}
+.flow li.l1{color:#d9c9b0}
+.flow li.l2{color:var(--ink);font-weight:600}
+.flow li.cur{background:var(--surf)}
+.flow li.fut{opacity:.38}
+.cap{font-size:11px;color:var(--sub);font-weight:600;letter-spacing:.04em;margin:18px 0 8px}
+.cap:first-child{margin-top:2px}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.steps li{display:flex;gap:12px;align-items:center;padding:8px;border-radius:10px;border:1px solid var(--line)}
+.steps li.on{border-color:rgba(230,181,102,.5);background:rgba(230,181,102,.05)}
+.steps .n{width:22px;height:22px;border-radius:50%;background:var(--surf2);font-size:11.5px;font-weight:700;display:grid;place-items:center;flex:none;font-family:var(--num)}
+.steps li.on .n{background:var(--acc);color:#1b1407}
+.steps .d{width:92px;height:64px;border-radius:6px;overflow:hidden;flex:none;background:#1b2028}
+.steps .d svg{width:100%;height:100%}
+.steps .x{font-size:13px;line-height:1.55}
+.rd{display:grid;grid-template-columns:auto 1fr;gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:13px}
+.rd div{padding:9px 12px;border-top:1px solid var(--line)}
+.rd div:nth-child(-n+2){border-top:0}
+.rd .a{color:var(--def);font-weight:600;white-space:nowrap;background:rgba(126,166,216,.05)}
+.tips{margin:0;padding-left:1.1em;font-size:13px;color:#d8d3c8}
+.tips li{margin-bottom:4px}
+.covs{font-size:12.5px;color:var(--sub);margin-top:8px}
+.covs b{color:var(--ink);font-weight:600}
+/* 分析 */
+.an-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.an-top p{margin:0;font-size:12.5px;color:var(--sub)}
+.prog{height:3px;background:var(--surf2);border-radius:2px;margin-top:12px;overflow:hidden;display:none}
+.prog.on{display:block}.prog i{display:block;height:100%;width:0;background:var(--acc)}
+.kpi{display:grid;grid-template-columns:repeat(3,1fr);margin-top:16px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.kpi div{padding:12px 0;text-align:center}.kpi div+div{border-left:1px solid var(--line)}
+.kpi b{display:block;font-family:var(--num);font-weight:400;font-size:24px;line-height:1.25}
+.kpi small{font-size:10.5px;color:var(--sub)}
+.bars{display:flex;flex-direction:column;gap:7px}
+.bar1{display:grid;grid-template-columns:86px 1fr 46px;gap:10px;align-items:center;font-size:12.5px}
+.bar1 .tr{height:8px;background:var(--surf2);border-radius:4px;overflow:hidden}
+.bar1 .tr i{display:block;height:100%;background:var(--ink);border-radius:4px}
+.bar1 .tr i.acc{background:var(--acc)}.bar1 .tr i.w{background:var(--warn)}
+.bar1 .v{font-family:var(--num);text-align:right;color:var(--sub)}
+.mix{display:flex;height:10px;border-radius:5px;overflow:hidden;gap:2px}
+.mix i{display:block;height:100%}
+.mixl{display:flex;gap:14px;font-size:11.5px;color:var(--sub);margin-top:6px}
+.mixl span{display:flex;align-items:center;gap:5px}.mixl i{width:8px;height:8px;border-radius:2px;display:block}
+.verdict{margin-top:14px;padding:10px 12px;border-radius:10px;background:var(--surf);font-size:13px;line-height:1.6}
+.verdict b{color:var(--acc);font-weight:600}
+.chart{border-radius:10px;overflow:hidden;background:#1b2028;margin-top:4px}
+.chart svg{width:100%;height:auto}
+.mini{font-size:11px;color:var(--faint);margin-top:12px;line-height:1.6}
+
+/* ---------- 作成 ---------- */
+.edhead{display:flex;align-items:center;gap:8px;margin:18px 0 12px}
+.edhead input{flex:1;min-width:0;height:40px;background:var(--surf);border:1px solid var(--line);border-radius:10px;padding:0 12px;font-size:15px;font-weight:600;outline:0}
+.edhead input:focus{border-color:var(--line2)}
+.edgrid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(320px,1fr);gap:20px;align-items:start}
+@media(max-width:899px){.edgrid{grid-template-columns:1fr;gap:12px}.edhead{margin:12px 0 10px}}
+.frames{display:flex;align-items:center;gap:6px;margin-top:12px;flex-wrap:wrap}
+.frames .lb{font-size:11.5px;color:var(--sub);margin-right:4px}
+.frames button.f{min-width:34px;height:32px;border-radius:9px;border:1px solid var(--line);font-family:var(--num);font-size:13px;color:var(--sub)}
+.frames button.f.on{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:600}
+.frames button.add{width:32px;height:32px;border-radius:9px;border:1px dashed var(--line2);display:grid;place-items:center;color:var(--sub)}
+.frames .sp{flex:1}
+.tools{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-top:10px;padding:4px;border:1px solid var(--line);border-radius:12px}
+.tools button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 0 6px;border-radius:9px;font-size:11px;color:var(--sub);white-space:nowrap;letter-spacing:-.02em}
+.tools button .ic{width:20px;height:20px}
+.tools button.on{background:var(--surf2);color:var(--ink)}
+.tools button.on .ic{color:var(--acc)}
+.ehint{font-size:12px;color:var(--sub);margin-top:8px;min-height:19px}
+.ehint.warn{color:var(--warn)}
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.card+.card{margin-top:12px}
+.card h3{margin:0 0 10px;font-size:13px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.card h3 small{font-weight:400;color:var(--sub);font-size:11.5px}
+.acts{display:flex;flex-direction:column;gap:6px}
+.act{display:flex;align-items:center;gap:10px;padding:7px 8px 7px 10px;border-radius:10px;background:var(--surf);font-size:13px}
+.act .who{width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--bg);font-weight:700;font-size:12px;display:grid;place-items:center;flex:none;font-family:var(--num)}
+.act .k{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+@media(max-width:560px){.tools button{font-size:10px}.act{gap:6px;padding:6px 6px 6px 8px}.act select{font-size:11.5px;padding:0 20px 0 7px;background-position:right 4px center;background-size:12px}}
+.act select{width:auto;height:30px;font-size:12px;padding:0 24px 0 8px;background-position:right 6px center}
+.act .del{color:var(--faint);width:28px;height:28px;display:grid;place-items:center;border-radius:8px}
+.act .del:hover{color:var(--warn)}
+.act .del .ic{width:16px;height:16px}
+.eopt{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+.eopt input[type=text],.eopt textarea{width:100%;background:var(--surf);border:1px solid var(--line);border-radius:9px;padding:9px 11px;font-size:13px;outline:0;resize:vertical}
+.eopt textarea{min-height:60px}
+.chk{display:flex;align-items:center;gap:10px;font-size:13px;cursor:pointer}
+.sw{width:40px;height:24px;border-radius:99px;background:var(--line2);position:relative;transition:.2s;flex:none}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:var(--ink);transition:.2s}
+.sw.on{background:var(--acc)}.sw.on::after{left:19px;background:#1b1407}
+.erun{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.erun .btn{height:44px}
+.snack{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translate(-50%,10px);background:var(--ink);color:var(--bg);font-size:13px;font-weight:600;padding:9px 16px;border-radius:10px;opacity:0;pointer-events:none;transition:.25s;z-index:50;white-space:nowrap}
+.snack.on{opacity:1;transform:translate(-50%,0)}
+@media(min-width:900px){.snack{bottom:30px}}
+.myrow{display:flex;align-items:center;gap:6px}
+.myrow .row{flex:1}
+.myrow .ibtn{border:1px solid var(--line)}
+
+/* ---------- 試合（スコアシート） ---------- */
+.gtop{display:flex;align-items:center;gap:10px;margin:18px 0 14px}
+.gtop h1{font-size:20px;margin:0;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.glist{display:flex;flex-direction:column;gap:8px}
+.grow{display:flex;align-items:center;gap:14px;padding:14px;border-radius:14px;background:var(--bg2);border:1px solid var(--line);text-align:left;width:100%}
+.grow:hover{border-color:var(--line2)}
+.grow .tx{flex:1;min-width:0}.grow .tx b{display:block;font-size:14.5px}.grow .tx small{color:var(--sub);font-size:12px}
+.grow .sc{font-family:var(--num);font-size:20px;white-space:nowrap}
+.form{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.form label small{display:block;font-size:11px;color:var(--sub);margin:0 0 4px 2px}
+.inp{width:100%;height:38px;background:var(--surf);border:1px solid var(--line);border-radius:9px;padding:0 10px;font-size:13.5px;outline:0;color-scheme:dark}
+.inp:focus{border-color:var(--line2)}
+.form .w2{grid-column:span 2}
+@media(max-width:700px){.form{grid-template-columns:1fr 1fr}.form .w2{grid-column:span 2}}
+.teams2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+@media(max-width:899px){.teams2{grid-template-columns:1fr}}
+.ptable{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+.ptable th{font-size:11px;color:var(--sub);font-weight:600;text-align:left;padding:4px 4px}
+.ptable td{padding:3px 4px}
+.ptable .inp{height:34px}
+.ptable td.no{width:62px}.ptable td.st{width:46px;text-align:center}
+.ck{width:22px;height:22px;border-radius:6px;border:1px solid var(--line2);display:inline-grid;place-items:center;cursor:pointer}
+.ck.on{background:var(--acc);border-color:var(--acc)}
+.ck.on::after{content:"";width:9px;height:5px;border-left:2px solid #1b1407;border-bottom:2px solid #1b1407;transform:rotate(-45deg) translate(1px,-1px)}
+.sbd{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+.sbd .tm{text-align:center;min-width:0}
+.sbd .tm .nm{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sbd .tm .pt{font-family:var(--num);font-weight:300;font-size:46px;line-height:1.1}
+.sbd .mid{text-align:center}
+.sbd .pd{font-size:12px;color:var(--acc);font-weight:700;letter-spacing:.06em}
+.sbd .clk{font-family:var(--num);font-size:30px;font-weight:400;line-height:1.2;font-variant-numeric:tabular-nums;cursor:pointer}
+.sbd .clk.stop{color:var(--sub)}
+.sbd .cb{display:flex;gap:4px;justify-content:center;margin-top:6px}
+.sbd .cb button{height:30px;padding:0 10px;border-radius:8px;border:1px solid var(--line2);font-size:12px;font-weight:600}
+.sbd .cb button.go{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tinfo{display:flex;justify-content:center;gap:10px;margin-top:6px;font-size:11px;color:var(--sub);flex-wrap:wrap}
+.dots{display:inline-flex;gap:3px;vertical-align:middle;margin-left:4px}
+.dots i{width:8px;height:8px;border-radius:50%;background:var(--surf2)}
+.dots i.on{background:var(--warn)}
+.dots.to i{border-radius:2px}.dots.to i.on{background:var(--faint)}
+.bonus{color:var(--warn);font-weight:700}
+.pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:6px;margin-top:8px}
+.pb{position:relative;display:flex;flex-direction:column;align-items:flex-start;padding:7px 9px;border-radius:10px;background:var(--surf);border:1px solid var(--line);text-align:left;min-height:58px}
+.pb b{font-family:var(--num);font-size:19px;line-height:1.1}
+.pb small{font-size:10.5px;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.pb .pp{position:absolute;right:8px;top:6px;font-family:var(--num);font-size:12px;color:var(--sub)}
+.pb .fl{display:flex;gap:2px;margin-top:3px}.pb .fl i{width:6px;height:6px;border-radius:50%;background:var(--surf2)}.pb .fl i.on{background:var(--warn)}
+.pb.sel{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc) inset;background:rgba(230,181,102,.08)}
+.pb.out{opacity:.45}.pb.out::after{content:"退場";position:absolute;right:7px;bottom:6px;font-size:10px;color:var(--warn);font-weight:700}
+.pb.team{justify-content:center;align-items:center;color:var(--sub);font-size:12px;font-weight:600}
+.th3{display:flex;align-items:baseline;justify-content:space-between;margin-top:14px}
+.th3 b{font-size:13.5px}.th3 small{font-size:11.5px;color:var(--sub)}
+.abar{position:sticky;bottom:0;z-index:15;margin:14px -4px 0;padding:10px;border-radius:14px;background:rgba(26,32,41,.97);border:1px solid var(--line2);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+@media(max-width:899px){.abar{bottom:calc(64px + env(safe-area-inset-bottom))}}
+.abar .who{font-size:12.5px;color:var(--sub);margin:0 2px 8px;display:flex;justify-content:space-between;gap:8px}
+.abar .who b{color:var(--ink)}
+.abar .g{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.abar button.a{height:44px;border-radius:10px;background:var(--surf2);font-weight:700;font-size:14px;font-family:var(--num);line-height:1.1}
+.abar button.a.ok{background:var(--ink);color:var(--bg)}
+.abar button.a.ng{color:var(--sub);font-weight:500}
+.abar button.a.f{color:var(--warn)}
+.abar button.a small{font-family:var(--sans);font-size:10px;display:block;font-weight:500}
+.abar .hint{font-size:12px;color:var(--sub);text-align:center;padding:6px 0}
+.abar .g4{grid-template-columns:repeat(4,1fr);margin-top:6px}
+@media(max-width:420px){.abar .g{grid-template-columns:repeat(3,1fr)}.abar .g.g4{grid-template-columns:repeat(4,1fr)}.abar button.a{height:40px}}
+.gtabs{display:flex;gap:2px;margin:18px 0 10px;border-bottom:1px solid var(--line);overflow-x:auto}
+.gtabs button{padding:10px 14px;font-size:13px;color:var(--sub);font-weight:600;position:relative;white-space:nowrap}
+.gtabs button.on{color:var(--ink)}.gtabs button.on::after{content:"";position:absolute;left:14px;right:14px;bottom:-1px;height:2px;background:var(--acc)}
+.glog{list-style:none;margin:0;padding:0;max-height:420px;overflow:auto}
+.glog li{display:flex;align-items:center;gap:10px;padding:7px 4px;border-bottom:1px solid var(--line);font-size:13px}
+.glog .t{font-family:var(--num);font-size:11.5px;color:var(--faint);min-width:62px}
+.glog .x{flex:1;min-width:0}
+.glog .s{font-family:var(--num);color:var(--sub);font-size:12px;white-space:nowrap}
+.glog button{color:var(--faint);width:28px;height:28px;display:grid;place-items:center;flex:none}
+.glog button:hover{color:var(--warn)}
+.glog button .ic{width:16px;height:16px}
+.stt{width:100%;border-collapse:collapse;font-size:12.5px}
+.stt th{font-size:11px;color:var(--sub);font-weight:600;text-align:right;padding:6px;border-bottom:1px solid var(--line2);white-space:nowrap}
+.stt td{text-align:right;padding:6px;border-bottom:1px solid var(--line);font-family:var(--num);white-space:nowrap}
+.stt th:nth-child(-n+2),.stt td:nth-child(-n+2){text-align:left}
+.stt td:nth-child(2){font-family:var(--sans)}
+.stt tr.tot td{font-weight:700;border-top:1px solid var(--line2)}
+.scrollx{overflow-x:auto}
+.qs{display:grid;grid-template-columns:minmax(80px,auto) repeat(var(--nq),1fr) auto;font-size:13px;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:10px}
+.qs div{padding:7px 8px;text-align:center;border-top:1px solid var(--line);font-family:var(--num)}
+.qs div.h{border-top:0;color:var(--sub);font-size:11px;font-family:var(--sans)}
+.qs div.n{text-align:left;font-family:var(--sans);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qs div.tt{font-weight:700}
+.sheetwrap{overflow:auto;background:#fff;border-radius:10px;padding:12px}
+/* 記録用紙（印刷） */
+#printsheet{display:none}
+.sheet{width:190mm;color:#111;background:#fff;font-family:var(--sans);font-size:8.5pt;line-height:1.3;margin:0 auto}
+.sheet h2{font-size:14pt;text-align:center;margin:0 0 3mm;letter-spacing:.3em;font-weight:700}
+.sheet table{border-collapse:collapse;width:100%}
+.sheet td,.sheet th{border:0.6pt solid #222;padding:0.6mm 1mm}
+.sheet th{background:#eee;font-weight:600;font-size:7.5pt}
+.sheet .hd td{height:6mm}
+.sheet .bd{display:grid;grid-template-columns:1fr 70mm;gap:3mm;margin-top:3mm}
+.sheet .tb{margin-bottom:3mm}
+.sheet .tb .tn{font-size:10pt;font-weight:700;padding:1mm}
+.sheet .box{display:inline-block;width:3.6mm;height:3.6mm;border:0.6pt solid #222;margin-right:0.6mm;vertical-align:middle}
+.sheet .box.x{background:linear-gradient(to top right,transparent 44%,#111 44%,#111 56%,transparent 56%)}
+.sheet .pl td{height:5mm;text-align:center}
+.sheet .pl td.nm{text-align:left;width:32mm}
+.sheet .pl td.f{width:6.5mm;font-size:7pt}
+.sheet .rs{display:grid;grid-template-columns:repeat(4,1fr);gap:1mm}
+.sheet .rs th{font-size:6.5pt;padding:0.3mm}
+.sheet .rs td{height:3.45mm;padding:0 0.4mm;text-align:center;font-size:6.3pt;line-height:3.2mm}
+.sheet .rs td.p{color:#999}
+.sheet .rs td.m2{background:linear-gradient(to top right,transparent 42%,#111 42%,#111 58%,transparent 58%);color:#111}
+.sheet .rs td.m1{color:#111;font-weight:700;background:radial-gradient(circle,#111 0 0.7mm,transparent 0.8mm)}
+.sheet .rs td.m3{background:linear-gradient(to top right,transparent 42%,#111 42%,#111 58%,transparent 58%);color:#111}
+.sheet .rs td.c3 span{display:inline-block;border:0.6pt solid #111;border-radius:50%;min-width:3mm;line-height:2.8mm}
+.sheet .rs td.end{border-bottom:1.6pt solid #111}
+.sheet .ft{display:grid;grid-template-columns:1.2fr 1fr;gap:3mm;margin-top:3mm}
+.sheet .note{font-size:6.5pt;color:#555;margin-top:2mm}
+@media print{
+  @page{size:A4 portrait;margin:8mm}
+  body{background:#fff}
+  .bar,main,.bnav,.snack{display:none!important}
+  #printsheet{display:block}
+}
+/* ---------- スカウト ---------- */
+.scgrid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(320px,1fr);gap:20px;align-items:start}
+@media(max-width:899px){.scgrid{grid-template-columns:1fr;gap:12px}}
+.vbox{border-radius:14px;overflow:hidden;background:#000;border:1px solid var(--line);position:relative}
+.vbox video{display:block;width:100%;max-height:calc(100vh - 280px);background:#000}
+.vpick{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;aspect-ratio:16/9;background:var(--bg2);border:1px dashed var(--line2);border-radius:14px;color:var(--sub);font-size:12.5px;text-align:center;padding:20px;cursor:pointer;width:100%}
+.vpick .ic{width:30px;height:30px;color:var(--acc)}
+.vpick b{color:var(--ink);font-size:14.5px}
+.vctl{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+.vctl .tmv{flex:1;font-size:12.5px;color:var(--sub);font-family:var(--num)}
+.vctl .fn{font-size:11.5px;color:var(--faint);width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.seg2{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:3px;border-radius:11px;background:var(--surf);margin-bottom:12px}
+.seg2 button{padding:8px 0;border-radius:9px;font-size:13px;color:var(--sub);font-weight:600}
+.seg2 button.on{background:var(--surf2);color:var(--ink)}
+.lbl{font-size:11px;color:var(--sub);font-weight:600;margin:12px 0 6px;display:flex;justify-content:space-between}
+.lbl:first-child{margin-top:0}
+.chs{display:flex;flex-wrap:wrap;gap:6px}
+.chs button{padding:6px 11px;border-radius:999px;border:1px solid var(--line);font-size:12.5px;color:var(--sub)}
+.chs button.on{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:600}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.res button{height:42px;border-radius:10px;background:var(--surf2);font-weight:700;font-size:13px}
+.res button.ok{background:var(--ink);color:var(--bg)}
+.res button.ng{color:var(--sub);font-weight:500}
+.minic{border-radius:10px;overflow:hidden;background:#1b2028;cursor:crosshair;max-width:250px}
+.minic svg{width:100%;height:auto}
+.noin .inp{width:100%;font-family:var(--num);font-size:15px}
+.tblock{margin-top:14px}
+.rec{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:var(--surf);margin-top:6px}
+.rec .n{font-family:var(--num);font-size:18px;color:var(--acc);width:22px}
+.rec .x{flex:1;font-size:13px}
+.rec .x small{display:block;color:var(--sub);font-size:11.5px}
 </style>
 </head>
 <body>
-<header>
-  <div class="kicker">BASKETBALL PLAY SIMULATOR</div>
-  <h1>うごく作戦ボード</h1>
-  <p>チームの悩みや「こうしたい」を書くと、合う戦術を選んで作戦ボードで再生します。守備はヘルプやスクリーンへの対応を自分で判断し、攻撃はそのズレを見てパス・シュートを選びます。5人制と3x3に対応。</p>
-</header>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-logo" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2.5"/><path d="M8.5 3v6.5h7V3"/><path d="M5.6 3v4.8a6.4 6.4 0 0 0 12.8 0V3"/><path d="M9.6 21a2.4 2.4 0 0 1 4.8 0"/></symbol>
+  <symbol id="i-lib" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></symbol>
+  <symbol id="i-mark" viewBox="0 0 24 24"><path d="M6.5 3.5h11v17l-5.5-4-5.5 4z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
+  <symbol id="i-restart" viewBox="0 0 24 24"><path d="M4 11a8 8 0 1 1 2.3 5.7"/><path d="M4 5v6h6"/></symbol>
+  <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M3 7h3.5c3.5 0 5.5 10 9 10H21"/><path d="M3 17h3.5c1.5 0 2.6-1.8 3.6-4"/><path d="M14.3 9.2C15 8 15.8 7 17 7h4"/><path d="M18.5 4.5L21 7l-2.5 2.5M18.5 14.5L21 17l-2.5 2.5"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V4"/><path d="M4 20h16"/><path d="M8 16v-4M12 16V8M16 16v-6"/></symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-save" viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M8 4v5h7V4M8 20v-6h8v6"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></symbol>
+  <symbol id="i-move" viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/><path d="M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3"/></symbol>
+  <symbol id="i-run" viewBox="0 0 24 24"><path d="M4 18C9 18 12 8 19 6"/><path d="M14.5 4.5L19.5 6 17.5 10.5"/></symbol>
+  <symbol id="i-drib" viewBox="0 0 24 24"><path d="M3 15l2.5-4 2.5 4 2.5-4 2.5 4 2.5-4 2 3.2"/><path d="M17 10.5l3.5 1.5-1 3.6"/></symbol>
+  <symbol id="i-scr" viewBox="0 0 24 24"><path d="M4 19L15 8"/><path d="M11 4.5l8 8"/></symbol>
+  <symbol id="i-pass" viewBox="0 0 24 24"><path d="M3 18l2-2M8 13l2-2M13 8l2-2" /><path d="M14 4h6v6"/></symbol>
+  <symbol id="i-ball" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4v16"/><path d="M6.3 6.3a8 8 0 0 1 0 11.4M17.7 6.3a8 8 0 0 0 0 11.4"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/></symbol>
+  <symbol id="i-sheet" viewBox="0 0 24 24"><rect x="5" y="3.5" width="14" height="17" rx="2"/><path d="M9 3.5v2h6v-2M8.5 10h7M8.5 13.5h7M8.5 17h4"/></symbol>
+  <symbol id="i-film" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="14" rx="2"/><path d="M10 9.5v5l4.5-2.5z"/></symbol>
+  <symbol id="i-print" viewBox="0 0 24 24"><path d="M7 9V4h10v5"/><rect x="4" y="9" width="16" height="7" rx="1.5"/><path d="M7 14h10v6H7z"/></symbol>
+  <symbol id="i-back5" viewBox="0 0 24 24"><path d="M11 7L6 12l5 5M18 7l-5 5 5 5"/></symbol>
+  <symbol id="i-fwd5" viewBox="0 0 24 24"><path d="M13 7l5 5-5 5M6 7l5 5-5 5"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7.5 3v5.5c0 4.6-3.2 8.2-7.5 9.5-4.3-1.3-7.5-4.9-7.5-9.5V6z"/></symbol>
+</svg>
+
+<header class="bar"><div class="bar-in">
+  <div class="brand"><svg class="ic"><use href="#i-logo"/></svg>うごく作戦ボード</div>
+  <nav class="tabs" id="tabs"><button data-v="lib">作戦集</button><button data-v="edit">作成</button><button data-v="game">試合</button><button data-v="scout">スカウト</button><button data-v="my">マイ作戦</button></nav>
+  <div class="sp"></div>
+  <button class="install" id="install">ホーム画面に追加</button>
+</div></header>
+
 <main>
-  <section>
-    <div class="card">
-      <label class="t" for="q">チームへの要望・悩み</label>
-      <textarea id="q" placeholder="例：外のシューターをノーマークにしたい／背の高い選手を生かしたい／ゾーンを崩したい"></textarea>
-      <div class="ex" id="ex"></div>
-      <div class="row">
-        <div><span class="small">人数</span><div class="seg" id="mode"><button data-v="auto" class="on">自動</button><button data-v="5">5人制</button><button data-v="3">3x3</button></div></div>
-        <div><span class="small">相手の守備</span><div class="seg" id="def"><button data-v="auto" class="on">自動</button><button data-v="man">マンツー</button><button data-v="zone">ゾーン</button></div></div>
-      </div>
-      <button class="go" id="go">作戦を出す</button>
-      <div class="read" id="read"></div>
-      <button id="install">📲 ホーム画面に追加して、アプリとして使う</button>
-      <div class="cands" id="cands"></div>
+  <!-- 作戦集 -->
+  <section class="view" id="v-lib">
+    <div class="libhead"><h1>作戦集</h1><small id="libcount"></small></div>
+    <label class="search" id="sbox"><svg class="ic"><use href="#i-search"/></svg><input id="q" type="search" autocomplete="off" placeholder="やりたいことで探す（例：シューターを空けたい）"><button class="x" id="qx" aria-label="消去"><svg class="ic" style="width:16px;height:16px"><use href="#i-x"/></svg></button></label>
+    <div class="chips" id="cats"></div>
+    <div class="qhint" id="qhint"></div>
+    <div class="list" id="list"></div>
+    <p class="note">動きは一般的な戦術の形と、守備の原則（ヘルプ・ローテーション・スクリーンへの対応）にもとづくシミュレーションです。作った作戦はこの端末にだけ保存され、外部には送信しません。</p>
+  </section>
+
+  <!-- 再生 -->
+  <section class="view" id="v-play">
+    <div class="ph">
+      <button class="back" id="pback" aria-label="戻る"><svg class="ic"><use href="#i-back"/></svg></button>
+      <div class="tt"><small id="pcat"></small><h1 id="pname"></h1><div class="sb" id="psub"></div></div>
+      <button class="btn sm" id="pedit"><svg class="ic"><use href="#i-pen"/></svg>編集</button>
     </div>
-    <div class="box" style="margin-top:16px">
-      <h3>このボードの見方</h3>
-      <ul>
-        <li>赤＝攻撃、青＝守備。細い線は「誰が誰をマークしているか」</li>
-        <li>青に<b style="color:#f2c14e">黄色のふち</b>＝ヘルプやローテーションで持ち場を離れた守備</li>
-        <li>「!」＝スクリーンに引っかかって遅れた守備</li>
-        <li>点線の輪＝ノーマークの選手（最寄りの守備までの距離つき）</li>
-        <li>攻撃は、守備との距離とパスコースを毎瞬計算して、いちばん得点につながる選択をします</li>
-      </ul>
+    <div class="stage">
+      <div>
+        <div class="board" id="pboard"><svg id="bd" viewBox="-0.4 -0.4 15.8 11.8"></svg><div class="toast" id="toast"></div>
+          <div class="rescard" id="rescard"><div class="k"><b id="rk"></b><small id="rs"></small></div><div class="v"><b class="num" id="rv"></b><small>期待得点</small></div></div></div>
+        <div class="transport">
+          <button class="pbtn" id="pplay" aria-label="再生"></button>
+          <button class="ibtn" id="prestart" aria-label="最初から"><svg class="ic"><use href="#i-restart"/></svg></button>
+          <div class="track" id="track"><div class="rail"></div><div class="fill" id="tfill"></div><div id="tmk"></div><div class="knob" id="tknob"></div></div>
+          <div class="tm num" id="ptime">0.0 / 0.0秒</div>
+          <div class="speed" id="pspeed"><button data-v="0.5">0.5×</button><button data-v="1" class="on">1×</button><button data-v="2">2×</button></div>
+        </div>
+        <div class="defbar">
+          <label class="fld"><small>守備</small><select id="sdef"><option value="man">マンツーマン</option><option value="zone">2-3ゾーン</option></select></label>
+          <label class="fld"><small>スクリーン対応</small><select id="scov"><option value="auto">毎回変える</option><option value="drop">ドロップ</option><option value="hedge">ショウ</option><option value="switch">スイッチ</option><option value="blitz">ブリッツ</option><option value="under">アンダー</option></select></label>
+          <label class="fld"><small>守備の強さ</small><select id="slvl"><option value="0">弱い</option><option value="1" selected>標準</option><option value="2">強い</option></select></label>
+          <button class="btn again" id="pagain"><svg class="ic"><use href="#i-shuffle"/></svg>別の展開</button>
+        </div>
+        <div class="legend">
+          <span><svg width="14" height="14"><circle cx="7" cy="7" r="6" fill="#ECE7DC"/></svg>攻撃</span>
+          <span><svg width="14" height="14"><circle cx="7" cy="7" r="5.5" fill="#0E1116" stroke="#7EA6D8" stroke-width="1.6"/></svg>守備</span>
+          <span><svg width="14" height="14"><circle cx="7" cy="7" r="5.5" fill="#0E1116" stroke="#E6B566" stroke-width="1.6"/></svg>持ち場を離れた守備</span>
+          <span><svg width="22" height="12"><circle cx="11" cy="6" r="5" fill="none" stroke="#E6B566" stroke-dasharray="2 2"/></svg>ノーマーク</span>
+          <span><svg width="24" height="10"><path d="M1 5h18" stroke="#E6B566" stroke-dasharray="3 2.5" stroke-width="1.6"/></svg>パス</span>
+          <span><svg width="18" height="12"><path d="M2 10L12 2M8 0.5l6 7" stroke="#ECE7DC" stroke-width="1.6" fill="none"/></svg>スクリーン</span>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="ptabs" id="ptabs"><button data-v="flow" class="on">流れ</button><button data-v="steps">手順</button><button data-v="reads">読み</button><button data-v="an">分析</button></div>
+        <div class="pane on" id="pane-flow"><ul class="flow" id="flow"></ul></div>
+        <div class="pane" id="pane-steps"><ul class="steps" id="steps"></ul></div>
+        <div class="pane" id="pane-reads"><div id="reads"></div></div>
+        <div class="pane" id="pane-an"><div id="an"></div></div>
+      </div>
     </div>
   </section>
-  <section>
-    <div class="boardwrap"><svg id="board" xmlns="http://www.w3.org/2000/svg"></svg><div class="toast" id="toast"></div></div>
-    <div class="legend">
-      <span><svg width="14" height="14"><circle cx="7" cy="7" r="6" fill="#e8483b"/></svg>攻撃</span>
-      <span><svg width="14" height="14"><circle cx="7" cy="7" r="6" fill="#3a7bd5"/></svg>守備</span>
-      <span><svg width="26" height="10"><line x1="1" y1="5" x2="24" y2="5" stroke="#f2c14e" stroke-width="2" stroke-dasharray="4 3"/></svg>パス</span>
-      <span><svg width="22" height="12"><rect x="8" y="0" width="5" height="12" fill="#fff"/></svg>スクリーン</span>
-      <span><svg width="26" height="10"><line x1="1" y1="5" x2="24" y2="5" stroke="rgba(255,255,255,.5)" stroke-width="2"/></svg>動いた跡</span>
+
+  <!-- 作成 -->
+  <section class="view" id="v-edit">
+    <div class="edhead">
+      <input id="ename" placeholder="作戦名" maxlength="40">
+      <button class="btn sm" id="enew"><svg class="ic"><use href="#i-plus"/></svg>新規</button>
+      <button class="btn sm fill" id="esave"><svg class="ic"><use href="#i-save"/></svg>保存</button>
     </div>
-    <div class="ctrl">
-      <button id="play">▶ 再生</button>
-      <button class="sec" id="again">↻ 守備を変えてもう一回</button>
-      <label><input type="checkbox" id="links" checked>マークの線</label>
-      <label class="sp">速さ <select id="speed"><option value="0.45">スロー</option><option value="0.75" selected>ふつう</option><option value="1.1">速い</option></select></label>
+    <div class="edgrid">
+      <div>
+        <div class="board" id="eboard"><svg id="ed" viewBox="-0.4 -0.4 15.8 11.8"></svg><div class="toast" id="etoast"></div></div>
+        <div class="frames" id="frames"></div>
+        <div class="tools" id="tools">
+          <button data-v="place"><svg class="ic"><use href="#i-move"/></svg>配置</button>
+          <button data-v="run" class="on"><svg class="ic"><use href="#i-run"/></svg>走る</button>
+          <button data-v="drib"><svg class="ic"><use href="#i-drib"/></svg>ドリブル</button>
+          <button data-v="scr"><svg class="ic"><use href="#i-scr"/></svg>スクリーン</button>
+          <button data-v="pass"><svg class="ic"><use href="#i-pass"/></svg>パス</button>
+          <button data-v="ball"><svg class="ic"><use href="#i-ball"/></svg>ボール</button>
+        </div>
+        <div class="ehint" id="ehint"></div>
+      </div>
+      <div>
+        <div class="card">
+          <h3><span id="eftitle">コマ1の動き</span><button class="ibtn" id="eundo" aria-label="元に戻す" style="width:30px;height:30px"><svg class="ic" style="width:17px;height:17px"><use href="#i-undo"/></svg></button></h3>
+          <div class="acts" id="eacts"></div>
+          <div class="eopt" style="margin-top:12px">
+            <input type="text" id="edesc" placeholder="このコマの説明（空欄なら自動で作成）" maxlength="80">
+            <label class="chk" id="edecw"><span class="sw" id="edec"></span>このコマから攻撃が自由に判断する</label>
+          </div>
+        </div>
+        <div class="erun">
+          <button class="btn" id="eprev"><svg class="ic"><use href="#i-eye"/></svg>動きを確認</button>
+          <button class="btn fill" id="etest"><svg class="ic"><use href="#i-shield"/></svg>守備をつけて試す</button>
+        </div>
+        <div class="card" style="margin-top:12px">
+          <h3>メモ</h3>
+          <div class="eopt"><textarea id="ememo" placeholder="狙い・使う場面など" maxlength="200"></textarea></div>
+        </div>
+      </div>
     </div>
-    <div class="pattern" id="pattern"></div>
-    <div id="detail"></div>
+  </section>
+
+  <!-- マイ作戦 -->
+  <section class="view" id="v-game"><div id="game"></div></section>
+  <section class="view" id="v-scout"><div id="scout"></div></section>
+
+  <section class="view" id="v-my">
+    <div class="libhead"><h1>マイ作戦</h1><small id="mycount"></small></div>
+    <div class="list" id="mylist"></div>
   </section>
 </main>
-<footer>※動きは一般的な戦術の基本形と、守備の動き方の目安をもとにしたシミュレーションです。実際の試合では選手の能力や相手によって変わります。入力した内容はどこにも送信・保存されません。</footer>
-<script>
-// =====================================================================
-//  座標はメートル。x：コート中央0（左右±7.5）、y：エンドラインから
-// =====================================================================
-const HOOP={x:0,y:1.575};
-const V=(x,y)=>({x,y});
-const add=(a,b)=>V(a.x+b.x,a.y+b.y),sub=(a,b)=>V(a.x-b.x,a.y-b.y),mul=(a,k)=>V(a.x*k,a.y*k);
-const len=a=>Math.hypot(a.x,a.y),dist=(a,b)=>len(sub(a,b));
-const unit=a=>{const l=len(a)||1;return V(a.x/l,a.y/l)};
-const lerpV=(a,b,t)=>V(a.x+(b.x-a.x)*t,a.y+(b.y-a.y)*t);
-const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
-function segDist(p,a,b){const ab=sub(b,a);const t=clamp(((p.x-a.x)*ab.x+(p.y-a.y)*ab.y)/((ab.x*ab.x+ab.y*ab.y)||1),0,1);return {d:dist(p,add(a,mul(ab,t))),t}}
-function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 
-// =====================================================================
-//  戦術データ
-//  phases: t=説明, mv={選手:{p:[[x,y],...], k:'run'|'drib'|'scr', d:遅れ秒, s:速さ}}, pass:[元,先], dec=判断してよい
-// =====================================================================
-const PLAYS=[
-{id:'pnr',mode:5,name:'ピック&ロール',sub:'2人で崩す、いちばん基本の形',tags:{pnr:3,big:2,drive:2,basic:2},pnr:'O5',cov:['drop','hedge','switch'],
- lead:'ボールを持つO1に、O5が壁（スクリーン）を作る。O1のマークが壁に引っかかった瞬間、O1・ゴールへ走るO5・外の3人のうち、どこが空くかを読んで攻める。',
- start:{O1:[0,8.6],O2:[-5.3,6.6],O3:[6.9,0.9],O4:[-6.9,0.9],O5:[2.6,1.9]},ball:'O1',
- phases:[{t:'O5がトップへ上がり、O1のマークの右側に壁を作る',mv:{O5:{p:[[0.9,7.7]],k:'scr'}}},
-  {t:'O1が壁を使って右へドリブル。O5は少し待ってからゴールへ走る（ロール）',dec:1,mv:{O1:{p:[[2.0,7.9],[3.5,5.4],[2.3,3.2]],k:'drib'},O5:{p:[[1.2,5.2],[0.5,2.6]],d:0.45}}}],
- reads:['O5のマークが下がって待つ（ドロップ）→ O1がミドルやフローターを打てる','O5のマークが前に出る（ヘッジ）→ ゴールへ走るO5が空く','マークを交換（スイッチ）→ 背の高さが合わない所を攻める','コーナーの守備がO5を止めに寄る → 空いたコーナーへパス'],
- tips:['スクリーンは「止まって」作る。動きながらだとファウル','O1は壁に肩がふれるくらい近くを通ると、マークが引っかかる','ロールは「O1のマークが引っかかったのを見てから」']},
-{id:'pnp',mode:5,name:'ピック&ポップ',sub:'シュートが打てるビッグマン向け',tags:{pnr:2,shooter:3,big:2},pnr:'O4',cov:['drop','hedge','switch'],
- lead:'スクリーンをかけたO4が、ゴールではなく外へ開く（ポップ）。O4のマークがドリブルのO1を止めに出るほど、外のO4が空く。',
- start:{O1:[0,8.6],O2:[-6.9,0.9],O3:[5.3,6.6],O4:[-2.45,5.8],O5:[2.6,1.9]},ball:'O1',
- phases:[{t:'O4がO1の左側に壁を作る',mv:{O4:{p:[[-0.9,7.7]],k:'scr'}}},
-  {t:'O1は左へドリブル。O4はゴールへ行かず、3Pラインの外へ開く',dec:1,mv:{O1:{p:[[-2.0,7.9],[-3.4,5.4],[-2.4,3.4]],k:'drib'},O4:{p:[[-1.6,8.6],[-2.9,9.1]],d:0.35}}}],
- reads:['O4のマークがO1を止めに出る → 外のO4へ戻して3P','O4のマークが外までついてくる → ゴール下が空くのでO1がそのままドライブ','スイッチ → O1は足の遅いビッグマンを相手に1対1'],
- tips:['O4は開いたらすぐ打てる構えで待つ','O1は「抜く」と見せて、守備を2人引きつける']},
-{id:'stagger',mode:5,name:'スタッガースクリーン',sub:'シューターを2枚の壁で空ける',tags:{shooter:3,three:2},
- lead:'ゴール下のシューターO2が、縦に並んだ2枚の壁（O4・O5）を続けて使って外へ。O2のマークは2回引っかかるので、追いつけない。',
- start:{O1:[2.6,8.6],O2:[-1.1,1.1],O3:[6.9,0.9],O4:[-2.6,3.0],O5:[-3.6,5.3]},ball:'O1',
- phases:[{t:'O4とO5が縦に並んで、2枚の壁を作る（スタッガー）',mv:{O4:{p:[[-2.7,3.5]],k:'scr'},O5:{p:[[-4.2,5.6]],k:'scr'}}},
-  {t:'O2が2枚の壁のすぐ横を通って、左ウイングの3Pラインの外へ',dec:1,mv:{O2:{p:[[-1.6,2.4],[-3.4,4.3],[-4.6,5.6],[-5.6,6.6]],s:6.4}}},
-  {t:'壁を作った2人は、守備の動きを見てゴールへ（スリップ）',dec:1,mv:{O4:{p:[[-1.6,2.0]]},O5:{p:[[-2.0,4.0]],d:0.2}}}],
- reads:['O2のマークが壁の内側を近道 → O2は外へ出ずにゴールへ曲がる','壁役のマークがO2に飛びつく → 壁役がゴールへ','受けた瞬間に守備が飛んでくる → ドリブルで1つかわしてシュート'],
- tips:['O2はゆっくり歩いて、マークを壁の近くまで連れてくる','受けたらドリブルせずに打つ（キャッチ&シュート）']},
-{id:'backdoor',mode:5,name:'バックドアカット',sub:'ボールをもらえない時の裏ワザ',tags:{backdoor:3,small:2,basic:2},deny:'O2',
- lead:'パスコースを強くふさがれた（ディナイ）O2が、マークの背中側をゴールへ走る。相手が前に出てくるほど決まる。',
- start:{O1:[2.6,8.6],O2:[-5.0,6.3],O3:[6.9,0.9],O4:[-6.9,0.9],O5:[2.6,1.9]},ball:'O1',
- phases:[{t:'O2が外へ出てボールをもらおうとする。マークはパスコースをふさぐ（ディナイ）。O5はハイポストへ',mv:{O2:{p:[[-5.8,7.6]],s:3.2},O5:{p:[[-0.7,6.0]]}}},
-  {t:'O1からハイポストのO5へパス',pass:['O1','O5']},
-  {t:'O2は急に向きを変えて、マークの背中側をゴールへ走る',dec:1,mv:{O2:{p:[[-4.2,5.6],[-1.3,1.6]],s:6.6}}}],
- reads:['マークがついてくる → O2はそのまま逆のコーナーへ抜けてやり直し','O5のマークがO2を止めに下がる → O5が自分でシュート','逆サイドの守備がゴール下に寄る → 空いた外の選手へ'],
- tips:['外へ出る時はゆっくり、カットは一気に','パスは床にワンバウンドさせると通りやすい']},
-{id:'drivekick',mode:5,name:'ドライブ&キック（5アウト）',sub:'全員が外に広がって、ドライブで崩す',tags:{drive:3,small:2,shooter:2,spacing:2},
- lead:'5人全員が3Pラインの外に立ち、ゴール下を空ける。O1がドライブし、止めに来た守備の「元のマーク」へパス（キックアウト）。',
- start:{O1:[0,8.6],O2:[-5.3,6.6],O3:[5.3,6.6],O4:[-6.9,0.9],O5:[6.9,0.9]},ball:'O1',
- phases:[{t:'O1が右へドライブ。O3は少し上へ動いて、パスの通り道を作る',dec:1,mv:{O1:{p:[[1.4,6.6],[1.9,3.0],[1.0,1.9]],k:'drib',s:5.0},O3:{p:[[4.2,8.4]],d:0.5}}}],
- reads:['誰も止めに来ない → そのままレイアップ','コーナーの守備が寄る → コーナーへ','ウイングの守備が寄る → ウイングへ。さらに守備が飛んできたら、もう1本外へ回す'],
- tips:['ドライブの瞬間、他の4人は止まらず「見える位置」へ少し動く','コーナーの3Pはゴールにいちばん近い3P']},
-{id:'highlow',mode:5,name:'ハイ・ロー',sub:'背の高い2人で、高い所と低い所から',tags:{big:3,post:2},
- lead:'ハイポストのO4がボールを受け、ゴール下のO5へ。O5のマークが上（ボール側）に回った瞬間、頭の上を越すパス（ロブ）が通る。',
- start:{O1:[-5.3,6.6],O2:[-6.9,0.9],O3:[6.9,0.9],O4:[-2.45,5.8],O5:[-2.9,2.3]},ball:'O1',
- phases:[{t:'O1からハイポストのO4へパス',pass:['O1','O4']},
-  {t:'O5がマークを背中で押さえて、ゴール側の場所をとる（シール）',dec:1,mv:{O5:{p:[[-1.9,1.7]],s:2.2}}}],
- reads:['O5のマークがボール側に回る → 頭の上を越すロブ','O5のマークが後ろにいる → O4が自分でシュート','ヘルプが来る → 外の選手へ'],
- tips:['O5はお尻と腕で場所をキープ。手でつかむとファウル','パスはO5の「マークと反対側」に出す']},
-{id:'zonehigh',mode:5,name:'ゾーン攻略：ハイポスト',sub:'2-3ゾーンの真ん中の穴をつく',tags:{zone:3,big:1},zone:1,
- lead:'2-3ゾーンは、フリースローライン付近（ハイポスト）が穴になりやすい。そこでボールを受けると、ゾーンが縮んで外とゴール下が空く。',
- start:{O1:[0,8.6],O2:[-5.3,6.6],O3:[5.3,6.6],O4:[6.9,0.9],O5:[-2.6,1.6]},ball:'O1',
- phases:[{t:'O5がゾーンの真ん中、ハイポストへ上がる',mv:{O5:{p:[[0,5.6]],s:5}}},
-  {t:'O1からO5へパス。ゾーンの守備が縮む',pass:['O1','O5']},
-  {t:'O4はエンドライン近くの空いた場所（ショートコーナー）へ',dec:1,mv:{O4:{p:[[4.3,1.2]]}}}],
- reads:['下の守備がO5に出る → ショートコーナーのO4やゴール下が空く','誰もO5に出ない → O5がそのままシュート','ゾーンが縮む → 外のO2・O3へ戻して3P'],
- tips:['ハイポストで受けたら、まずゴールの方を向く','ゾーンには「守備と守備の間」に立つ']},
-{id:'overload',mode:5,name:'ゾーン攻略：オーバーロード',sub:'片側に人数を集めて数で上回る',tags:{zone:3,shooter:2},zone:1,
- lead:'ゾーンは「場所」を守るので、片側に4人集まると守る人数が足りなくなる。ボールを素早く回して、空いた1人を作る。',
- start:{O1:[0,8.6],O2:[-5.3,6.6],O3:[5.3,6.6],O4:[2.45,5.8],O5:[2.6,1.9]},ball:'O1',
- phases:[{t:'O3がエンドライン沿いに逆サイドのコーナーへ。O4・O5も左へ寄る',mv:{O3:{p:[[4.0,0.8],[-4.0,0.8],[-6.9,0.9]],s:6},O5:{p:[[-2.6,2.0]]},O4:{p:[[-2.5,5.6]]}}},
-  {t:'O1から左ウイングのO2へパス',pass:['O1','O2']},
-  {t:'ゾーンが寄りきる前に、空いた所へボールを回す',dec:1,mv:{}}],
- reads:['コーナーに守備が出る → ゴール下のO5が空く','ゾーンが左に寄りすぎる → 逆サイドへ大きく戻す'],
- tips:['パスは「受けたらすぐ次」。ためるとゾーンが間に合う','コーナーの選手は、受ける前から打つ準備']},
-{id:'iso',mode:5,name:'ラスト1本のアイソレーション',sub:'エースに1対1をさせる',tags:{clutch:3,iso:3,drive:1},
- lead:'残り数秒、得点力のあるO1に1対1をさせる形。他の4人は外へ広がって、O1の前のスペースを空ける（クリアアウト）。',
- start:{O1:[1.5,9.0],O2:[6.9,0.9],O3:[5.3,6.6],O4:[-6.9,0.9],O5:[-3.6,0.8]},ball:'O1',
- phases:[{t:'O3が逆サイドへ抜けて、O1の右側を空ける（クリアアウト）',mv:{O3:{p:[[0.5,6.0],[-5.3,6.6]],s:5.5}}},
-  {t:'O1が右へ動いて間合いをはかり、ゴールへ仕掛ける',dec:1,mv:{O1:{p:[[3.3,6.8],[2.6,4.2],[1.2,2.2]],k:'drib',s:5.2}}}],
- reads:['ヘルプが来る → 右コーナーのO2へパス','マークが下がる → そのままジャンプシュート','外したら → O5・O4がリバウンドへ飛び込む'],
- tips:['早く仕掛けすぎると、相手に最後の1本を渡してしまう','他の4人も「パスが来るかも」と準備しておく']},
-// ---------------- 3x3 ----------------
-{id:'pnr3',mode:3,name:'3x3 ピック&ロール',sub:'3x3でいちばん使う基本',tags:{pnr:3,big:2,drive:2,basic:2},pnr:'O3',cov:['switch','drop','hedge'],
- lead:'3x3はコートに3人しかいないので、2人の連携がそのまま点になる。O3の壁を使ってO1がドライブ、O3はゴールへ。O2は外で待つ。',
- start:{O1:[0,8.4],O2:[-5.6,5.6],O3:[4.0,2.0]},ball:'O1',
- phases:[{t:'O3が上がって、O1のマークの右側に壁を作る',mv:{O3:{p:[[0.9,7.4]],k:'scr'}}},
-  {t:'O1は右へドリブル。O3はゴールへ走る。O2は少し上へ動いて外で待つ',dec:1,mv:{O1:{p:[[2.1,7.6],[3.4,5.2],[2.2,3.0]],k:'drib'},O3:{p:[[1.0,5.0],[0.4,2.4]],d:0.45},O2:{p:[[-4.6,7.8]],d:0.3}}}],
- reads:['O2のマークがO3を止めに寄る → 外のO2へ（アークの外は2点）','スイッチ → 背の高さが合わない所を攻める','マークが下がる → O1がアークの外から2点'],
- tips:['ショットクロックは12秒。迷わず仕掛ける','O2は「アークの外」で待つと、決めれば2点']},
-{id:'dho3',mode:3,name:'3x3 ハンドオフ→ドライブ',sub:'手渡しパスで勢いをつけて抜く',tags:{drive:3,small:2},
- lead:'ドリブルしたO1が、走ってきたO2に手渡し（ハンドオフ）しながら壁になる。O2は勢いのままゴールへ。',
- start:{O1:[0,8.4],O2:[-5.6,5.6],O3:[5.0,4.0]},ball:'O1',
- phases:[{t:'O1が左へドリブルして、O2に近づく。O2は外へ上がる',mv:{O1:{p:[[-2.6,7.6]],k:'drib',s:4},O2:{p:[[-4.4,8.0]],s:3}}},
-  {t:'O2がO1のすぐ横を通って、手渡しでボールを受ける。O1はそのまま壁になる',mv:{O1:{p:[[-2.7,7.5]],k:'scr'},O2:{p:[[-3.3,7.0]],s:4}},pass:['O1','O2']},
-  {t:'O2が勢いのままゴールへドライブ',dec:1,mv:{O2:{p:[[-2.0,5.0],[-0.8,2.2]],k:'drib',s:5.4},O1:{p:[[-3.8,8.2]],d:0.4}}}],
- reads:['O2のマークが下がる → O2がアークの外から2点','O1のマークがO2に寄る → O1が外で空く','O3のマークがヘルプ → ゴール下のO3へ'],
- tips:['手渡しの瞬間、O1は足を止めて壁になる','O2はボールを受ける前からスピードを上げておく']},
-{id:'pin3',mode:3,name:'3x3 ピンダウンで外から2点',sub:'シューターを下からの壁で空ける',tags:{shooter:3,three:2},
- lead:'ゴール下のO2のために、O3が下向きに壁を作る（ピンダウン）。O2は壁を使って外へ出て、アークの外から2点。',
- start:{O1:[4.0,8.0],O2:[-1.0,1.4],O3:[-3.6,4.8]},ball:'O1',
- phases:[{t:'O3が下へ降りて、O2のマークに壁を作る（ピンダウン）',mv:{O3:{p:[[-2.4,3.0]],k:'scr'}}},
-  {t:'O2が壁を使って、左のアークの外へ',dec:1,mv:{O2:{p:[[-1.8,2.4],[-3.4,4.2],[-5.4,7.2]],s:6.3}}},
-  {t:'O3は壁を作ったあと、ゴールへ（スリップ）',dec:1,mv:{O3:{p:[[-1.0,2.0]],d:0.1}}}],
- reads:['マークが近道してくる → O2は外へ出ずゴールへ曲がる（カール）','スイッチ → O3がゴールへ走る','O1のマークが寄る → O1がそのまま2点'],
- tips:['3x3のアークの外は2点。シューターの価値が大きい','O3は壁を作ったらすぐゴールへ動き、次の選択肢になる']},
-{id:'bd3',mode:3,name:'3x3 バックドア',sub:'外で前をふさがれた時に',tags:{backdoor:3,small:2,basic:2},deny:'O2',
- lead:'外でボールをもらおうとして前をふさがれたら、マークの背中側をゴールへ。3x3は人数が少ないので、ゴール下が空きやすい。',
- start:{O1:[0,8.4],O2:[5.2,5.6],O3:[-4.6,4.0]},ball:'O1',
- phases:[{t:'O2が外へ出てボールをもらおうとする。マークが前に出てふさぐ',mv:{O2:{p:[[6.0,7.5]],s:3},O3:{p:[[-5.8,6.4]]}}},
-  {t:'O2は急に向きを変えて、マークの背中側をゴールへ走る',dec:1,mv:{O2:{p:[[4.6,5.6],[1.2,1.6]],s:6.6}}}],
- reads:['マークがついてくる → O2は逆サイドへ抜けてやり直し','O3のマークがヘルプ → 外のO3へ'],
- tips:['外へ出る時はゆっくり、カットは一気に','O3はゴール下を空けるため、外側に立っておく']},
-{id:'spain3',mode:3,name:'3x3 スペインピック&ロール',sub:'壁の後ろにもう1枚の壁',tags:{pnr:3,shooter:2,big:2},pnr:'O3',cov:['switch','drop'],
- lead:'ピック&ロールで、ゴールへ走るO3のマークに、O2が背中側から壁を作る。O3がフリーで走れるうえ、O2も外で空く。',
- start:{O1:[0,8.4],O2:[-0.6,1.6],O3:[2.6,4.6]},ball:'O1',
- phases:[{t:'O3がO1の右側に壁を作る。O2はその後ろへ上がる',mv:{O3:{p:[[0.9,7.4]],k:'scr'},O2:{p:[[0.2,4.2]],d:0.3}}},
-  {t:'O1は右へドリブル。O3はゴールへ走り、O2はO3のマークの背中に壁を作る',mv:{O1:{p:[[2.1,7.6],[3.5,5.4]],k:'drib'},O3:{p:[[0.7,5.0]],d:0.4},O2:{p:[[0.4,5.9]],k:'scr',d:0.2}}},
-  {t:'O3はゴール下へ。O2は壁を作ったあと、外へ開く',dec:1,mv:{O3:{p:[[0.3,1.9]]},O2:{p:[[-2.6,7.6],[-4.2,8.0]],d:0.25},O1:{p:[[2.6,3.6]],k:'drib'}}}],
- reads:['O2のマークがO3を止める → 外のO2へ（2点）','誰も来ない → O1がそのままドライブ'],
- tips:['O2の壁は、O3のマークの「背中」に作る','3人とも役割があるので、練習で動きを合わせておく']},
-{id:'iso3',mode:3,name:'3x3 ラスト1本のアイソ',sub:'残り時間、エースに任せる',tags:{clutch:3,iso:3,drive:1},
- lead:'残り時間が少ないとき、エースのO1に1対1をさせる。O2・O3はコーナーへ下がり、O1の前を広く空ける。',
- start:{O1:[2.0,8.6],O2:[5.6,4.6],O3:[-4.0,4.0]},ball:'O1',
- phases:[{t:'O2とO3はコーナーへ下がって、O1の前を空ける',mv:{O2:{p:[[6.9,0.9]]},O3:{p:[[-6.9,0.9]]}}},
-  {t:'O1が右へ動いて間合いをはかり、ゴールへ仕掛ける',dec:1,mv:{O1:{p:[[3.4,6.8],[2.4,4.0],[1.0,2.2]],k:'drib',s:5.2}}}],
- reads:['ヘルプが来る → 空いたコーナーへパス','マークが下がる → アークの外から2点'],
- tips:['3x3は「アークの外から2点」で一発逆転もある','外したら全員でリバウンドへ']}
-];
+<nav class="bnav" id="bnav">
+  <button data-v="lib"><svg class="ic"><use href="#i-lib"/></svg>作戦集</button>
+  <button data-v="edit"><svg class="ic"><use href="#i-pen"/></svg>作成</button>
+  <button data-v="game"><svg class="ic"><use href="#i-sheet"/></svg>試合</button>
+  <button data-v="scout"><svg class="ic"><use href="#i-film"/></svg>スカウト</button>
+  <button data-v="my"><svg class="ic"><use href="#i-mark"/></svg>マイ作戦</button>
+</nav>
+<div class="snack" id="snack"></div>
+<div id="printsheet"></div>
 
-// =====================================================================
-//  シミュレーション
-// =====================================================================
-const COV_JA={drop:'ドロップ（壁役のマークが下がってゴール下を守る）',hedge:'ヘッジ（壁役のマークが前に出てドリブルを止める）',switch:'スイッチ（マークを交換する）'};
-let S=null; // 状態
-function newSim(play,seed,defMode){
-  const R=rng(seed);
-  const zone=play.mode===5&&(play.zone||defMode==='zone');
-  const off={},def={};
-  for(const k in play.start){off[k]={id:k,p:V(...play.start[k]),v:V(0,0),trail:[]}}
-  const cov=play.pnr?(play.cov[Math.floor(R()*play.cov.length)]):null;
-  for(const k in off){const id='X'+k.slice(1);def[id]={id,assign:k,p:null,v:V(0,0),stun:0,stunCount:0,role:'man',react:0.12+R()*0.28,speed:(play.mode===3?5.0:4.8)+R()*0.8,trail:[]}}
-  const s={play,R,zone,off,def,cov,t:0,ball:{holder:play.ball,fl:null},phase:0,mv:{},scr:{},hist:[],log:[],shot:null,done:false,lastCatch:0,passes:0,helpId:null,tagId:null,hedgeT:0,attack:false,phaseStart:0,events:{},decisions:[],pat:''};
-  S=s;
-  // 守備の初期位置
-  const snap=snapshot();for(const id in def){def[id].p=zone?zoneTarget(def[id],snap):manTarget(def[id],snap)}
-  s.pat=(zone?'今回の守り方：2-3ゾーン':'今回の守り方：マンツーマン')+(cov?'／ピック&ロールへの対応は「'+COV_JA[cov]+'」':'');
-  startPhase(0);
-  return s;
-}
-function startPhase(i){
-  S.phase=i;S.phaseStart=S.t;const ph=S.play.phases[i];if(!ph)return;
-  for(const k in (ph.mv||{})){const m=ph.mv[k];S.mv[k]={path:m.p.map(q=>V(...q)),k:m.k||'run',d:S.t+(m.d||0),s:m.s||(m.k==='drib'?4.6:5.4)};if(S.scr[k]&&m.k!=='scr')S.mv[k].release=true}
-  if(ph.pass)S.pendingPass=ph.pass;
-  setStep(i);
-}
-function snapshot(lag){ // lag秒前の状態
-  const S_=S;const tt=S_.t-(lag||0);let h=null;
-  for(let i=S_.hist.length-1;i>=0;i--){if(S_.hist[i].t<=tt){h=S_.hist[i];break}}
-  if(!h){const off={};for(const k in S_.off)off[k]=S_.off[k].p;return {off,ball:ballPos(),holder:S_.ball.holder,fl:S_.ball.fl}}
-  return h;
-}
-function ballPos(){const b=S.ball;if(b.fl){const f=b.fl;const t=clamp((S.t-f.t0)/f.dur,0,1);const to=f.to==='HOOP'?HOOP:S.off[f.to].p;return lerpV(f.from,to,t)}return b.holder&&S.off[b.holder]?S.off[b.holder].p:HOOP}
-function rec(){const off={};for(const k in S.off)off[k]=V(S.off[k].p.x,S.off[k].p.y);S.hist.push({t:S.t,off,ball:ballPos(),holder:S.ball.holder,fl:S.ball.fl});if(S.hist.length>90)S.hist.shift()}
-function holderOf(snap){return snap.fl?snap.fl.to:snap.holder}
-// --- マンツーの立ち位置 ---
-function manTarget(d,snap){
-  const o=snap.off[d.assign];if(!o)return d.p;const ball=snap.ball;const h=holderOf(snap);
-  const toH=unit(sub(HOOP,o));
-  if(d.assign===h&&!snap.fl) return add(o,mul(toH,0.95));
-  const db=dist(o,ball);
-  const p=S.play;
-  if(p.deny===d.assign&&S.phase<=1&&S.ball.holder!=='O5'){ // ディナイ：パスコースに強く入る
-    return add(add(o,mul(unit(sub(ball,o)),1.0)),mul(toH,0.2));
-  }
-  const dk=dist(o,HOOP);
-  if(dk<2.9){ // ゴール近くの選手：近くないと簡単にやられる
-    if(db<6.5) return add(o,mul(unit(sub(ball,o)),0.72)); // ボール側に回る（3/4フロント）
-    return add(add(o,mul(unit(sub(ball,o)),0.6)),mul(toH,0.45));
-  }
-  if(db<7.2){ // ボールから1パスの距離：パスコース寄り
-    return add(add(o,mul(unit(sub(ball,o)),0.75)),mul(toH,0.55));
-  }
-  // ヘルプサイド：ボールとゴールの間へ沈む
-  const mid=lerpV(o,ball,0.36);return lerpV(mid,HOOP,0.28);
-}
-// --- 2-3ゾーンの立ち位置 ---
-const ZH=[V(-2.0,6.3),V(2.0,6.3),V(-3.9,2.0),V(0,1.5),V(3.9,2.0)];
-function zoneTarget(d,snap){
-  const i=+d.id.slice(1)-1;const ball=snap.ball;const h=holderOf(snap);
-  const home=V(ZH[i].x+ball.x*0.32,ZH[i].y+(i<2?(ball.y<4?-1.4:0):0));
-  // 担当エリア：ボールに最も近いホームの守備がボールへ
-  const homes=ZH.map(z=>V(z.x+ball.x*0.32,z.y+(ball.y<4&&z.y>5?-1.4:0)));
-  let near=0,best=1e9;homes.forEach((z,j)=>{const dd=dist(z,ball);if(dd<best){best=dd;near=j}});
-  if(i===near) return add(ball,mul(unit(sub(HOOP,ball)),1.0));
-  // 自分の担当エリアにいる攻撃選手に寄る
-  let tgt=null,bd=3.4;for(const k in snap.off){if(k===h)continue;const o=snap.off[k];const dd=dist(o,home);if(dd<bd){bd=dd;tgt=o}}
-  if(tgt) return lerpV(home,lerpV(tgt,HOOP,0.25),0.45);
-  return home;
-}
-// --- 1フレーム進める ---
-const DT=1/60;
-function tick(){
-  if(S.done)return;
-  S.t+=DT;rec();
-  moveOffense();
-  updateBall();
-  defenseBrain();
-  moveDefense();
-  if(!S.shot)offenseDecide();
-  // フェーズ進行
-  const ph=S.play.phases[S.phase];
-  if(ph&&!S.pendingPass&&!S.ball.fl){
-    const moving=Object.keys(ph.mv||{}).some(k=>S.mv[k]&&S.mv[k].path.length);
-    if(!moving&&S.t-S.phaseStart>0.25){if(S.phase<S.play.phases.length-1)startPhase(S.phase+1);else{S.phase=S.play.phases.length;S.freeT=S.t;setStep(-1)}}
-  }
-  if(S.t>14&&!S.shot)forceShot();
-  for(const k in S.off)trail(S.off[k]);for(const k in S.def)trail(S.def[k]);
-}
-function trail(o){if(!o._tt||S.t-o._tt>0.08){o._tt=S.t;o.trail.push(V(o.p.x,o.p.y));if(o.trail.length>26)o.trail.shift()}}
-function moveOffense(){
-  for(const k in S.mv){const m=S.mv[k];const o=S.off[k];if(S.t<m.d||!m.path.length){continue}
-    if(m.release&&S.scr[k]){delete S.scr[k]}
-    if(m.k==='drib'&&!m.started&&k===S.ball.holder){m.started=1;const ob=Object.values(S.def).find(d=>d.assign===k);if(ob){ob.late=0.12+S.R()*0.38;if(ob.late>0.36)ev('late'+S.t,ob.id+'が1歩目に遅れる',0)}}
-    const tgt=m.path[0];const dv=sub(tgt,o.p);const L=len(dv);const step=m.s*DT;
-    if(L<=step){o.p=tgt;m.path.shift();if(!m.path.length&&m.k==='scr'){S.scr[k]=S.t}}
-    else o.p=add(o.p,mul(unit(dv),step));
-  }
-  // 攻め直し（誰も空いていない時のドライブ）
-  if(S.attack&&!S.ball.fl&&!S.shot){const o=S.off[S.ball.holder];const dv=sub(V(HOOP.x+(o.p.x>0?0.6:-0.6),HOOP.y+0.6),o.p);if(len(dv)>0.2)o.p=add(o.p,mul(unit(dv),4.6*DT))}
-  // パス待ち（台本のパス）
-  if(S.pendingPass&&!S.ball.fl&&S.ball.holder===S.pendingPass[0]){
-    const moving=S.mv[S.pendingPass[1]]&&S.mv[S.pendingPass[1]].path.length&&S.play.id!=='dho3';
-    if(!moving||S.t-S.phaseStart>0.9){doPass(S.pendingPass[0],S.pendingPass[1],null);S.pendingPass=null}
-  }
-}
-function doPass(from,to,why){
-  const a=S.off[from].p,b=S.off[to].p;const d=dist(a,b);
-  const lob=why&&why.lob;
-  S.ball.fl={from:V(a.x,a.y),to,t0:S.t,dur:Math.max(0.22,d/(lob?8:11.5)),lob,passer:from};S.passes++;S.lastPasser=from;
-  if(S.mv[from]&&S.mv[from].k==='drib')S.mv[from].path=[];
-  S.attack=false;
-}
-function updateBall(){
-  const f=S.ball.fl;if(!f)return;
-  if(S.t-f.t0>=f.dur){
-    if(f.to==='HOOP'){S.done=true;S.ball.fl=null;S.ball.holder=null;finish();return}
-    S.ball.holder=f.to;S.ball.fl=null;S.lastCatch=S.t;if(f.lob){S.lobCatch=S.t}S.catchOpen=openness(f.to).d;
-    if(S.mv[f.to]&&S.play.id!=='dho3')S.mv[f.to].path=S.mv[f.to].path.slice(0,0);
-    rotateAfterCatch();
-  }
-}
-// --- パス後のマークの付け直し（スクランブル） ---
-function rotateAfterCatch(){
-  if(S.zone){S.helpId=S.tagId=null;return}
-  const offs=Object.keys(S.off),defs=Object.keys(S.def);
-  let best=null,bc=1e9;
-  const perm=(arr,l=[])=>{if(!arr.length){let c=0;defs.forEach((d,i)=>{const o=l[i];const dd=dist(S.def[d].p,S.off[o].p);c+=dd*(o===S.ball.holder?2.2:1)+(S.def[d].assign===o?-1.4:0)});if(c<bc){bc=c;best=l.slice()}return}
-    for(let i=0;i<arr.length;i++)perm(arr.slice(0,i).concat(arr.slice(i+1)),l.concat(arr[i]))};
-  perm(offs);
-  const changes=[];defs.forEach((d,i)=>{if(S.def[d].assign!==best[i]){changes.push(d+'→'+best[i]);S.def[d].assign=best[i]}});
-  S.helpId=null;S.tagId=null;S.hedgeT=0;
-  for(const d of defs)S.def[d].role='man';
-  if(changes.length>=2&&S.passes>1)ev('rot','ローテーション：'+changes.map(c=>c.replace('→','が')+'へ').join('、'),1);
-}
-// --- 守備の判断 ---
-function defenseBrain(){
-  if(S.zone||S.shot)return;
-  const h=S.ball.holder;if(!h||S.ball.fl)return;
-  const ho=S.off[h].p;const onball=Object.values(S.def).find(d=>d.assign===h);
-  // ピック&ロールへの対応
-  const P=S.play;
-  if(P.pnr&&S.scr[P.pnr]!==undefined||P.pnr&&S.cov&&S.t-S.phaseStart<2.5&&S.phase>=1&&!S.covDone){
-    const sc=S.off[P.pnr];const xs=Object.values(S.def).find(d=>d.assign===P.pnr);
-    if(xs&&dist(ho,sc.p)<3.2&&h!==P.pnr){
-      if(S.cov==='drop'){xs.role='drop';ev('drop',xs.id+'は下がってゴール下を守る（ドロップ）')}
-      if(S.cov==='hedge'&&!S.hedgeT){S.hedgeT=S.t;xs.role='hedge';ev('hedge',xs.id+'が前に出て、ドリブルを止めにいく（ヘッジ）')}
-      if(S.cov==='switch'&&onball&&onball.stun>0&&!S.switched){S.switched=true;const a=onball.assign;onball.assign=xs.assign;xs.assign=a;ev('sw',onball.id+'と'+xs.id+'がマークを交換（スイッチ）',1);S.covDone=true}
-    }
-    if(S.cov==='hedge'&&S.hedgeT&&S.t-S.hedgeT>0.95&&xs&&xs.role==='hedge'){xs.role='man';ev('hedge2',xs.id+'が自分のマークへ戻る → 戻るまでの間にズレが出る')}
-    if(S.cov==='drop'&&xs&&xs.role==='drop'&&dist(ho,HOOP)<3.0){xs.role='man'}
-  }
-  // ドライブへのヘルプ
-  const dh=dist(ho,HOOP);
-  const beaten=!onball||dist(onball.p,ho)>1.05||(onball.stun>0);
-  if(!S.helpId&&(dh<4.6&&beaten||dh<3.2)&&S.t-S.lastCatch>0.2){
-    const cands=Object.values(S.def).filter(d=>d!==onball&&d.role!=='hedge').map(d=>{const stop=add(ho,mul(unit(sub(HOOP,ho)),1.0));return {d,c:dist(d.p,stop)+(dist(S.off[d.assign].p,ho)<3?2.5:0)+S.R()*0.8}}).sort((a,b)=>a.c-b.c);
-    if(cands.length){const hd=cands[0].d;S.helpId=hd.id;hd.role='help';ev('help',hd.id+'がドライブを止めにヘルプ → '+hd.assign+'のマークが空く',1);
-      // 2人目のローテーション
-      const left=S.off[hd.assign].p;const c2=Object.values(S.def).filter(d=>d!==onball&&d!==hd&&d.role==='man').sort((a,b)=>dist(a.p,left)-dist(b.p,left))[0];
-      if(c2&&S.play.mode===5&&dist(c2.p,left)<6.5){c2.role='rotate';c2.rotTo=hd.assign;S.tagId=c2.id;ev('rot2',c2.id+'が'+hd.assign+'の方へ寄る（ローテーション）→ '+c2.assign+'が手薄に')}
-    }
-  }
-  // ゴール下へ走る選手へのタグ
-  if(!S.tagId&&S.play.mode===5){
-    for(const k in S.off){if(k===h)continue;const o=S.off[k];const dk=dist(o.p,HOOP);const md=Object.values(S.def).find(d=>d.assign===k);
-      const cutting=S.mv[k]&&S.mv[k].path.length>0&&S.t>=S.mv[k].d;
-      if(dk<3.0&&cutting&&md&&dist(md.p,o.p)>1.6){const tg=Object.values(S.def).filter(d=>d!==onball&&d!==md&&d.role==='man'&&d.id!==S.helpId).sort((a,b)=>dist(a.p,o.p)-dist(b.p,o.p))[0];
-        if(tg&&dist(tg.p,o.p)<5.5){tg.role='tag';tg.rotTo=k;S.tagId=tg.id;ev('tag'+k,tg.id+'がゴール下の'+k+'を止めに寄る → '+tg.assign+'が空く',1)}break}}
-  }
-}
-function defTarget(d){
-  const snap=snapshot(d.react);
-  if(S.zone)return zoneTarget(d,snap);
-  const h=S.ball.holder;
-  if(d.role==='help'&&h&&!S.ball.fl){const ho=S.off[h].p;return add(ho,mul(unit(sub(HOOP,ho)),0.95))}
-  if((d.role==='tag'||d.role==='rotate')&&d.rotTo){const o=S.off[d.rotTo].p;return d.role==='tag'?add(o,mul(unit(sub(HOOP,o)),0.6)):lerpV(lerpV(o,HOOP,0.3),snapshot(0).off[d.assign],0.35)}
-  if(d.role==='drop'&&h){const ho=snap.off[h];return add(HOOP,mul(unit(sub(ho,HOOP)),3.0))}
-  if(d.role==='hedge'&&h){const ho=S.off[h].p;const m=S.mv[h];const nx=m&&m.path.length?m.path[0]:HOOP;return add(ho,mul(unit(sub(nx,ho)),1.0))}
-  // パスが飛んでいる間：受け手のマークは詰め寄る（クローズアウト）
-  if(S.ball.fl&&S.ball.fl.to===d.assign&&S.ball.fl.to!=='HOOP'&&S.t-S.ball.fl.t0>0.12+d.react*0.6){const o=S.off[d.assign].p;return add(o,mul(unit(sub(HOOP,o)),1.05))}
-  return manTarget(d,snap);
-}
-function screenContact(){ // 味方がスクリーンのすぐ横を通ったら、その選手のマークが引っかかる
-  for(const sk in S.scr){const sc=S.off[sk].p;
-    for(const id in S.def){const d=S.def[id];if(d.assign===sk||d.stun>0)continue;const me=S.off[d.assign];
-      const key=id+sk;if(S._sc&&S._sc[key]&&S.t-S._sc[key]<1.5)continue;
-      if(dist(me.p,sc)<1.15&&dist(d.p,sc)<1.9&&dist(d.p,me.p)>0.6){
-        // マークが攻撃選手の「後ろ」（スクリーン越し）にいるか
-        const a=unit(sub(me.p,sc)),b=unit(sub(d.p,sc));if(a.x*b.x+a.y*b.y<0.35){S._sc=S._sc||{};S._sc[key]=S.t;
-          if(S.R()<0.82){d.stun=0.38+S.R()*0.3;d.stunCount++;ev('stun'+id+sk+Math.floor(S.t),id+'が'+sk+'のスクリーンに引っかかる',0)}
-          else ev('fight'+id+sk,id+'はスクリーンをすり抜けてついていく',0)}}}}
-}
-function moveDefense(){
-  screenContact();
-  for(const id in S.def){const d=S.def[id];
-    const tgt=defTarget(d);let dv=sub(tgt,d.p);const L=len(dv);
-    if(d.late>0)d.late-=DT;
-    const hd=S.ball.holder&&!S.ball.fl&&d.assign===S.ball.holder&&((S.mv[d.assign]&&S.mv[d.assign].k==='drib'&&S.mv[d.assign].path.length)||S.attack);
-    let sp=d.speed*(d.stun>0?0.3:1)*(d.late>0?0.45:1)*(hd?0.84:1);
-    // クローズアウトは最後に減速する（飛び込むと抜かれる）
-    if(S.ball.fl&&S.ball.fl.to===d.assign&&L<2.2)sp*=0.6;
-    if(d.role==='help'||d.role==='tag')sp*=1.05;
-    const step=Math.min(L,sp*DT);let np=L>0.01?add(d.p,mul(unit(dv),step)):d.p;
-    // 体のぶつかり：スクリーン役（0.78m）とその他の攻撃選手（0.55m）
-    for(const k in S.off){const o=S.off[k].p;const isScr=S.scr[k]!==undefined;const r=isScr?0.8:0.5;const dd=dist(np,o);
-      if(dd<r){const push=unit(sub(np,o));const side=V(-push.y,push.x);const goSide=(side.x*dv.x+side.y*dv.y)>0?side:mul(side,-1);
-        np=add(o,mul(push,r));np=add(np,mul(goSide,step*0.35));
-        if(isScr&&d.stun<=0&&L>0.5&&d.assign!==k&&!(S._sc&&S._sc[id+k]&&S.t-S._sc[id+k]<1.5)){S._sc=S._sc||{};S._sc[id+k]=S.t;d.stun=0.42;d.stunCount++;ev('stun'+id+k,id+'が'+k+'のスクリーンに引っかかる',0)}}}
-    // 守備同士の重なりを防ぐ
-    for(const j in S.def){if(j===id)continue;const o=S.def[j].p;const dd=dist(np,o);if(dd<0.55&&dd>0)np=add(o,mul(unit(sub(np,o)),0.55))}
-    np=V(clamp(np.x,-7.3,7.3),clamp(np.y,0.3,(S.play.mode===3?10.8:13.8)));
-    d.p=np;if(d.stun>0)d.stun-=DT;
-  }
-}
-// --- 攻撃の判断 ---
-function shotEV(pos,open,catchShoot){
-  const r=dist(pos,HOOP);const m3=S.play.mode===3;
-  const pts=m3?(r>=6.75?2:1):(r>=6.75?3:2);
-  let base=r<1.9?0.62:r<4.6?0.42:r<6.75?0.40:(r<8.6?0.36:0.18);
-  if(!catchShoot&&r>=1.9)base*=0.86;
-  const of=clamp((open-0.3)/1.4,0.08,1.12);
-  return {ev:base*of*pts,pts,r};
-}
-function openness(k){let m=99,who=null;for(const id in S.def){const dd=dist(S.def[id].p,S.off[k].p);if(dd<m){m=dd;who=id}}return {d:m,who}}
-function laneOK(a,b){ // パスコースが空いているか
-  for(const id in S.def){const p=S.def[id].p;const sd=segDist(p,a,b);const L=dist(a,b);if(sd.t*L<0.9||(1-sd.t)*L<0.7)continue;if(sd.d<0.72)return {ok:false,by:id}}return {ok:true}
-}
-function lobOK(a,b,k){ // ゴール下へのロブ：受け手のゴール側に守備がいないか
-  if(dist(b,HOOP)>2.6||dist(a,b)<3||dist(a,HOOP)>7.5)return false;if(k&&S.mv[k]&&S.mv[k].path.length)return false;
-  let near=0;for(const id in S.def)if(dist(S.def[id].p,b)<2.2)near++;if(near>1)return false;const toR=unit(sub(HOOP,b));
-  for(const id in S.def){const p=S.def[id].p;const dp=dist(p,b);if(dp<1.5){const u=unit(sub(p,b));if(u.x*toR.x+u.y*toR.y>0.25)return false}if(dist(p,HOOP)<0.9)return false}return true
-}
-function offenseDecide(){
-  if(S.ball.fl||S.pendingPass)return;
-  const h=S.ball.holder;if(!h)return;
-  const ph=S.play.phases[S.phase];const free=S.phase>=S.play.phases.length;
-  if(!free&&!(ph&&ph.dec))return;
-  if(S.t-S.lastCatch<0.22)return; // 受けてから判断までの時間
-  if(S._nd&&S.t<S._nd)return;S._nd=S.t+0.1;
-  const hp=S.off[h].p;let ho=openness(h);
-  // キャッチ&シュート：受けた瞬間の空き具合で打つ（構えて待っていれば、詰め寄りが届く前に打てる）
-  if(S.t-S.lastCatch<0.6&&S.catchOpen&&!(S.mv[h]&&S.mv[h].path.length))ho={d:Math.max(ho.d,S.catchOpen*0.72),who:ho.who};
-  const moving=S.mv[h]&&S.mv[h].path.length;
-  const self=shotEV(hp,ho.d,!moving&&!S.attack&&S.t-S.lastCatch<1.2);
-  let best=null;
-  for(const k in S.off){if(k===h)continue;const o=S.off[k].p;let op=openness(k);let lane=laneOK(hp,o);let lob=false;
-    if(lobOK(hp,o,k)&&op.d<1.7){lane={ok:true};lob=true;op={d:1.8,who:op.who}} // マークが前にいる＝頭越しなら届かない
-    if(!lane.ok)continue;
-    // パスが届くまでに守備が詰め寄る分を先読み
-    const fly=dist(hp,o)/(lob?8:11.5)+0.25;const md=Object.values(S.def).find(d=>d.assign===k);
-    let pd=op.d;if(lob){}else if(md&&md.role==='man'&&dist(md.p,o)<=op.d+0.3)pd=op.d-md.speed*fly*0.55;else pd=op.d-4.2*fly*0.35;
-    const e=shotEV(o,Math.max(0.3,pd),true);let val=e.ev*0.93;
-    if(k===S.lastPasser&&S.t-S.lastCatch<2.5)val*=0.6; // 返しのパスは基本しない
-    if(!best||val>best.val)best={k,val,op,e,lob};
-  }
-  const m3=S.play.mode===3;const thrShot=m3?0.5:0.76,thrPass=m3?0.52:0.82;
-  const tFree=free?S.t-(S.freeT||S.t):0;
-  const why=k=>{const md=Object.values(S.def).find(d=>d.assign===k);let r='';
-    if(md&&md.role==='help')r=md.id+'がヘルプに出たため';else if(md&&md.stunCount&&md.stun>-0.8)r=md.id+'がスクリーンで遅れたため';else if(md&&(md.role==='hedge'||md.role==='drop'))r=md.id+'がボールに寄ったため';else if(S.tagId&&S.def[S.tagId].assign===k)r=S.tagId+'がゴール下に寄ったため';return r};
-  const helpOn=S.helpId&&S.def[S.helpId]&&S.def[S.helpId].role==='help';
-  if(S.lobCatch&&S.t-S.lobCatch<0.5){S.lobCatch=0;return decideShot(h,shotEV(hp,Math.max(ho.d,1.5),true),{d:Math.max(ho.d,1.5)})}
-  // ドライブが止められた：無理に突っ込まず、出せる所へ
-  if(S.attack&&self.r<3.4&&ho.d<0.9){S.attack=false;ev('stop'+S.passes,'判断：'+ho.who+'に前をふさがれた → 止まって周りを見る',1);if(best&&best.val>self.ev)return decidePass(h,best,why(best.k)||'ドライブで守備を集めたので、');return decideShot(h,self,ho)}
-  // ゴール下まで来た
-  if(self.r<1.9){
-    if(best&&best.val>self.ev+0.05&&best.op.d>1.0)return decidePass(h,best,why(best.k));
-    return decideShot(h,self,ho);
-  }
-  if(self.ev>=thrShot&&(!best||best.val<self.ev+0.3))return decideShot(h,self,ho);
-  const tp=helpOn?thrPass*0.6:thrPass;
-  if(best&&best.val>=Math.max(tp,self.ev+(helpOn?0.05:0.18)))return decidePass(h,best,(helpOn&&!why(best.k)?S.helpId+'がヘルプに来たので、':'')+why(best.k));
-  if(free){
-    if(tFree>0.5&&!S.attack&&!moving){S.attack=true;const ob=Object.values(S.def).find(d=>d.assign===h);if(ob&&dist(ob.p,hp)<1.6)ob.late=0.15+S.R()*0.35;ev('att'+S.passes,'判断：パスもシュートも条件が悪い → '+h+'がゴールへ仕掛けて守備を動かす',1)}
-    if(tFree>3.4||S.passes>=4)return self.ev>=(best?best.val:0)?decideShot(h,self,ho):decidePass(h,best,why(best.k));
-  }
-}
-function decidePass(h,b,reason){
-  const d=b.op.d.toFixed(1);const kind=b.e.r>=6.75?(S.play.mode===3?'アークの外':'3P'):(b.e.r<1.9?'ゴール下':'ミドル');
-  ev('dec'+S.t,'判断：'+(reason?reason+'、':'')+b.k+'が空いた（最寄りの守備まで'+d+'m・'+kind+'）→ '+h+'から'+(b.lob?'頭の上を越すパス':'パス'),2);
-  doPass(h,b.k,{lob:b.lob});
-}
-function decideShot(h,e,op){
-  const kind=e.r>=6.75?(S.play.mode===3?'アークの外から2点':'3Pシュート'):(e.r<1.9?'ゴール下':'ミドルシュート');
-  const near=e.r<1.9;const g=near?(op.d>=1.5?2:op.d>=0.9?1:0):(op.d>=2.2?2:op.d>=1.4?1:0);
-  const lv=['守備が目の前（コンテスト）','少し余裕あり','ノーマーク'][g];
-  ev('shot','判断：'+h+'が'+kind+'（最寄りの守備まで'+op.d.toFixed(1)+'m・'+lv+'）',2);
-  S.shot={by:h,pos:V(S.off[h].p.x,S.off[h].p.y),kind,open:op.d,lv,g};
-  if(S.mv[h])S.mv[h].path=[];S.attack=false;
-  S.ball.fl={from:V(S.off[h].p.x,S.off[h].p.y),to:'HOOP',t0:S.t+0.18,dur:0.75,shot:true};
-}
-function forceShot(){const h=S.ball.holder;if(!h||S.ball.fl)return;const ho=openness(h);decideShot(h,shotEV(S.off[h].p,ho.d,false),ho)}
-// --- ログ ---
-function ev(key,msg,lv){if(S.events[key])return;S.events[key]=1;S.log.push({t:S.t,msg,lv:lv||0});drawLog();toast(msg,lv)}
-let toastT=null;function toast(m,lv){const t=document.getElementById('toast');t.textContent=m;t.style.borderLeftColor=lv===2?'#f2c14e':lv===1?'#ff6a3d':'#7fb0ff';t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),2600/+speed())}
-function drawLog(){const ul=document.getElementById('log');if(!ul)return;ul.innerHTML=S.log.map(l=>`<li class="${l.lv===2?'dec':''}"><span class="tm">${l.t.toFixed(1)}秒</span>${l.msg}</li>`).join('')}
-function finish(){const s=S.shot;if(!s)return;ev('end','結果：'+s.by+'の'+s.kind+'。'+(s.g===2?'ノーマークで打てた＝作戦成功':s.g===1?'余裕を持って打てた＝まずまず':'守備が間に合った＝「守備を変えてもう一回」で別の展開も見てみよう'),2);document.getElementById('play').textContent='▶ もう一度見る';running=false}
-
-// =====================================================================
-//  描画
-// =====================================================================
-const svg=document.getElementById('board');const NS='http://www.w3.org/2000/svg';
-const sx=x=>x+7.5;
-function el(tag,attrs,parent){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);(parent||svg).appendChild(e);return e}
-let L={};
-function drawCourt(mode){
-  svg.innerHTML='';const depth=mode===3?11:14;
-  svg.setAttribute('viewBox',`-0.6 -0.6 16.2 ${depth+1.2}`);
-  const g=el('g',{stroke:'rgba(255,255,255,.85)','stroke-width':0.07,fill:'none'});
-  el('rect',{x:0,y:0,width:15,height:depth},g);
-  el('rect',{x:sx(-2.45),y:0,width:4.9,height:5.8},g);
-  el('path',{d:`M ${sx(-1.8)} 5.8 A 1.8 1.8 0 0 0 ${sx(1.8)} 5.8`},g);
-  el('path',{d:`M ${sx(-1.8)} 5.8 A 1.8 1.8 0 0 1 ${sx(1.8)} 5.8`,'stroke-dasharray':'0.3 0.25'},g);
-  const yj=HOOP.y+Math.sqrt(6.75**2-6.6**2);
-  el('path',{d:`M ${sx(-6.6)} 0 L ${sx(-6.6)} ${yj} A 6.75 6.75 0 0 0 ${sx(6.6)} ${yj} L ${sx(6.6)} 0`},g);
-  el('path',{d:`M ${sx(-1.25)} ${HOOP.y} A 1.25 1.25 0 0 0 ${sx(1.25)} ${HOOP.y}`},g);
-  el('line',{x1:sx(-0.9),y1:1.2,x2:sx(0.9),y2:1.2,'stroke-width':0.12},g);
-  el('circle',{cx:sx(0),cy:HOOP.y,r:0.25,stroke:'#ff8a4c','stroke-width':0.08},g);
-  if(mode===5)el('path',{d:`M ${sx(-1.8)} 14 A 1.8 1.8 0 0 1 ${sx(1.8)} 14`},g);
-  const lb=el('text',{x:14.8,y:depth-0.25,'text-anchor':'end','font-size':0.4,fill:'rgba(255,255,255,.4)'});lb.textContent=mode===3?'3x3（15m×11m）　アークの外＝2点':'5人制（ハーフコート）';
-  L={trail:el('g',{}),links:el('g',{}),fx:el('g',{}),def:el('g',{}),off:el('g',{}),ball:el('g',{})};
-}
-function magnet(layer,p,label,color,ring,mark){
-  const g=el('g',{transform:`translate(${sx(p.x)},${p.y})`},layer);
-  el('circle',{cx:0.06,cy:0.09,r:0.44,fill:'rgba(0,0,0,.35)'},g);
-  el('circle',{cx:0,cy:0,r:0.44,fill:color,stroke:ring||'rgba(255,255,255,.9)','stroke-width':ring?0.12:0.05},g);
-  const t=el('text',{x:0,y:0.16,'text-anchor':'middle','font-size':0.44,'font-weight':700,fill:'#fff'},g);t.textContent=label;
-  if(mark){const m=el('text',{x:0.42,y:-0.38,'font-size':0.55,'font-weight':900,fill:'#f2c14e'},g);m.textContent=mark}
-}
-function draw(){
-  if(!S)return;
-  for(const k in L)if(k!=='trail')L[k].innerHTML='';L.trail.innerHTML='';
-  // 跡
-  const tr=(o,c)=>{if(o.trail.length<2)return;el('polyline',{points:o.trail.map(q=>`${sx(q.x)},${q.y}`).join(' ')+` ${sx(o.p.x)},${o.p.y}`,stroke:c,'stroke-width':0.07,fill:'none','stroke-linecap':'round','stroke-linejoin':'round'},L.trail)};
-  for(const k in S.off)tr(S.off[k],'rgba(255,255,255,.45)');for(const k in S.def)tr(S.def[k],'rgba(130,180,255,.35)');
-  // マークの線
-  if(document.getElementById('links').checked&&!S.zone)for(const id in S.def){const d=S.def[id];const o=S.off[d.assign].p;el('line',{x1:sx(d.p.x),y1:d.p.y,x2:sx(o.x),y2:o.y,stroke:d.role==='man'?'rgba(120,170,255,.35)':'rgba(242,193,78,.55)','stroke-width':0.04,'stroke-dasharray':'0.15 0.12'},L.links)}
-  // スクリーン
-  for(const k in S.scr){const o=S.off[k].p;const h=S.ball.holder&&S.off[S.ball.holder]?S.off[S.ball.holder].p:HOOP;let dir=unit(sub(h,o));const n=V(-dir.y,dir.x);
-    el('line',{x1:sx(o.x+n.x*0.55),y1:o.y+n.y*0.55,x2:sx(o.x-n.x*0.55),y2:o.y-n.y*0.55,stroke:'#fff','stroke-width':0.16,'stroke-linecap':'round'},L.fx)}
-  // ノーマークの輪
-  if(!S.done)for(const k in S.off){if(k===S.ball.holder&&!S.ball.fl)continue;const op=openness(k);if(op.d>=2.2){const o=S.off[k].p;
-    el('circle',{cx:sx(o.x),cy:o.y,r:0.95,stroke:'#f2c14e','stroke-width':0.05,fill:'none','stroke-dasharray':'0.18 0.14'},L.fx);
-    const t=el('text',{x:sx(o.x),y:o.y-1.08,'text-anchor':'middle','font-size':0.36,'font-weight':700,fill:'#f2c14e'},L.fx);t.textContent='フリー '+op.d.toFixed(1)+'m'}}
-  // パス
-  const f=S.ball.fl;if(f&&f.to!=='HOOP'){const to=S.off[f.to].p;el('line',{x1:sx(f.from.x),y1:f.from.y,x2:sx(to.x),y2:to.y,stroke:'#f2c14e','stroke-width':0.07,'stroke-dasharray':'0.28 0.2'},L.fx)}
-  if(S.shot){const s=S.shot.pos;el('path',{d:`M ${sx(s.x)} ${s.y} Q ${(sx(s.x)+sx(0))/2} ${Math.min(s.y,HOOP.y)-1.4} ${sx(0)} ${HOOP.y}`,stroke:'#f2c14e','stroke-width':0.06,fill:'none','stroke-dasharray':'0.12 0.14'},L.fx)}
-  // 選手
-  for(const id in S.def){const d=S.def[id];magnet(L.def,d.p,S.zone?'X':'X'+id.slice(1),'#3a7bd5',d.role!=='man'?'#f2c14e':null,d.stun>0?'!':null)}
-  for(const k in S.off)magnet(L.off,S.off[k].p,k.slice(1),'#e8483b');
-  // ボール
-  let b=ballPos();let lift=0;if(f){const t=clamp((S.t-f.t0)/f.dur,0,1);lift=Math.sin(Math.PI*t)*(f.shot?1.5:f.lob?1.1:0.25)}
-  const off=f?V(0,0):V(0.33,-0.33);
-  el('circle',{cx:sx(b.x)+off.x,cy:b.y+off.y-lift,r:0.23,fill:'#f28c28',stroke:'#7a3b0c','stroke-width':0.04},L.ball);
-}
-// =====================================================================
-//  再生
-// =====================================================================
-let running=false,raf=null,acc=0,lastT=0,seed=1,cur=null;
-const speed=()=>document.getElementById('speed').value;
-function loop(now){
-  if(!running)return;const dt=Math.min(0.05,(now-lastT)/1000);lastT=now;acc+=dt*speed();
-  while(acc>=DT){tick();acc-=DT;if(S.done)break}
-  draw();if(S.done){running=false;return}
-  raf=requestAnimationFrame(loop);
-}
-function start(){if(!S||S.done)reset();running=true;lastT=performance.now();acc=0;document.getElementById('play').textContent='❚❚ 一時停止';raf=requestAnimationFrame(loop)}
-function pause(){running=false;cancelAnimationFrame(raf);document.getElementById('play').textContent='▶ 再生'}
-function reset(){pause();drawCourt(cur.mode);newSim(cur,seed,defV());document.getElementById('pattern').textContent=S.pat;drawLog();draw()}
-function setStep(i){document.querySelectorAll('ol.steps li').forEach((li,j)=>li.classList.toggle('on',j===i))}
-function load(play,auto){
-  pause();cur=play;
-  const d=document.getElementById('detail');
-  d.innerHTML=`<h2>${play.name}</h2><p class="lead">${play.mode===3?'3x3':'5人制'}｜${play.sub}</p>
-   <div class="box" style="margin-top:0">${play.lead}</div>
-   <ol class="steps">${play.phases.map(s=>`<li>${s.t}</li>`).join('')}<li>ここからは、守備の動きを見て判断（パス・シュート・ドライブ）</li></ol>
-   <div class="box"><h3>この回の流れ（守備のズレと判断）</h3><ul id="log"></ul></div>
-   <div class="box"><h3>相手がこう来たら</h3><ul>${play.reads.map(x=>`<li>${x}</li>`).join('')}</ul></div>
-   <div class="box"><h3>練習のコツ</h3><ul>${play.tips.map(x=>`<li>${x}</li>`).join('')}</ul></div>
-   <div class="share">この作戦のリンク：<span id="lnk"></span><button id="copy">コピー</button></div>`;
-  const url=location.href.split('#')[0]+'#'+play.id;document.getElementById('lnk').textContent=url;
-  document.getElementById('copy').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(url);document.getElementById('copy').textContent='コピーしました'};
-  try{history.replaceState(null,'','#'+play.id)}catch(e){}
-  seed=1;reset();if(auto)start();
-}
-// --- 要望の読み取り ---
-const DICT=[
- [/シューター|シュート力|3P|スリー|3ポイント|外から|ロング|2P|ツーポイント|アーク|外の/,'shooter','外のシュート'],
- [/ドライブ|切り込|突破|抜き|速い|スピード|アタック/,'drive','ドライブ'],
- [/センター|ビッグ|インサイド|ゴール下|ポスト|背が高|長身|でかい|大きい選手/,'big','ビッグマン'],
- [/ゾーン|2-3|3-2|２－３/,'zone','ゾーン対策'],
- [/ディナイ|パスが入らない|もらえない|ボールをもらえ|前をふさが|オーバープレ|厳しくつ|マークが厳し/,'backdoor','ディナイ対策'],
- [/残り|ラスト|最後|終盤|ブザー|逆転|同点|1本|確実/,'clutch','ラスト1本'],
- [/エース|1対1|１対１|アイソ|個人技/,'iso','1対1'],
- [/ピック|スクリーン|PnR|ピック&ロール|ピックアンドロール|壁/,'pnr','スクリーン'],
- [/簡単|初心者|基本|シンプル|初めて|ミニバス|中学|覚えやす/,'basic','基本・簡単'],
- [/背が低|小さい|ガード中心|低身長|身長がない|小柄/,'small','小柄なチーム'],
- [/広が|スペース|5アウト|ファイブアウト/,'spacing','スペース'],
- [/ノーマーク|フリーに|空けたい|空けて/,'three','ノーマークを作る']
-];
-function parse(q,modeSel,defSel){
-  let mode=modeSel==='auto'?null:+modeSel;
-  if(mode===null){if(/3x3|3×3|３x３|3人|３人|スリーエックス/i.test(q))mode=3;else if(/5人|５人|5対5|５対５/.test(q))mode=5}
-  const tags={},hits=[];DICT.forEach(([re,tag,label])=>{if(re.test(q)){tags[tag]=1;hits.push(label)}});
-  if(defSel==='zone'&&!tags.zone){tags.zone=1;hits.push('ゾーン対策')}
-  return {mode,tags,hits};
-}
-function rank(r,defSel){
-  const any=Object.keys(r.tags).length>0;
-  return PLAYS.filter(p=>!r.mode||p.mode===r.mode).map(p=>{let s=0;for(const t in r.tags)s+=(p.tags[t]||0);if(!any)s=(p.tags.basic||0);
-    if(!r.mode&&p.mode===3)s-=0.5;if(defSel==='man'&&p.zone)s-=5;if(defSel==='zone'&&!p.zone&&p.mode===5)s-=1;return {p,s}}).sort((a,b)=>b.s-a.s);
-}
-const EX=['外のシューターをノーマークにしたい','背の高い選手を生かしたい','相手がゾーンで点が取れない','パスコースをふさがれてボールがもらえない','残り10秒、最後の1本を決めたい','3x3でドライブが得意な選手を生かしたい','初心者でも覚えやすい基本の作戦','3x3で外から2点を狙いたい'];
-const exBox=document.getElementById('ex');EX.forEach(t=>{const b=document.createElement('button');b.textContent=t;b.onclick=()=>{document.getElementById('q').value=t;run()};exBox.appendChild(b)});
-function seg(id){const s=document.getElementById(id);s.querySelectorAll('button').forEach(b=>b.onclick=()=>{s.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on')});return()=>s.querySelector('.on').dataset.v}
-const modeV=seg('mode'),defV=seg('def');
-function run(){
-  const q=document.getElementById('q').value.trim();const r=parse(q,modeV(),defV());const list=rank(r,defV());
-  document.getElementById('read').innerHTML=q?`読み取ったこと：${r.hits.length?r.hits.map(h=>`<span class="tag">${h}</span>`).join(''):'<span class="tag">特定できず→基本の作戦</span>'}${r.mode?`<span class="tag">${r.mode===3?'3x3':'5人制'}</span>`:''}`:'';
-  const c=document.getElementById('cands');c.innerHTML='';
-  list.slice(0,3).forEach((x,i)=>{const b=document.createElement('button');b.className='cand'+(i===0?' on':'');
-    b.innerHTML=`<span><b>${x.p.name}</b><br><small>${x.p.sub}</small></span><span class="m">${i===0?'いちばん合う':'ほかの案'}</span>`;
-    b.onclick=()=>{c.querySelectorAll('.cand').forEach(z=>z.classList.remove('on'));b.classList.add('on');load(x.p,true)};c.appendChild(b)});
-  load(list[0].p,true);
-}
-document.getElementById('go').onclick=run;
-document.getElementById('play').onclick=()=>{if(running)pause();else{if(S&&S.done)reset();start()}};
-document.getElementById('again').onclick=()=>{seed=(seed*7919+13)%100000+1;reset();start()};
-document.getElementById('links').onchange=draw;
-// ---- アプリ化（PWA） ----
-if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
-let deferredPrompt=null;const ib=document.getElementById('install');
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;ib.style.display='block'});
-ib.onclick=async()=>{if(deferredPrompt){deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;ib.style.display='none'}else alert('ブラウザの共有メニュー（iPhoneは Safari の共有ボタン）から「ホーム画面に追加」を選んでください')};
-const isIOS=/iPhone|iPad|iPod/.test(navigator.userAgent)&&!window.navigator.standalone;if(isIOS)ib.style.display='block';
-const h0=location.hash.slice(1);load(PLAYS.find(p=>p.id===h0)||PLAYS[0],false);
-</script>
+<script src="plays.js?v=6"></script>
+<script src="engine.js?v=6"></script>
+<script src="app.js?v=8"></script>
+<script src="game.js?v=11"></script>
+<script src="scout.js?v=11"></script>
 </body>
 </html>
