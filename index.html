@@ -545,7 +545,7 @@ body{font-size:15px}
           <label class="fld"><small>守備の強さ</small><select id="slvl"><option value="0">弱い</option><option value="1" selected>標準</option><option value="2">強い</option></select></label>
           <button class="btn again" id="pagain"><svg class="ic"><use href="#i-shuffle"/></svg>別の展開</button>
         </div>
-        <p class="howto"><b>緑の場所</b>は、守備から遠く点になりやすい場所ほど濃くなります。<b>「ここが空く！」</b>と緑の矢印は、守備から2m以上離れてパスを受けられる選手です。</p>
+        <p class="howto">再生中は<b>「ここが空く！」</b>と緑の矢印で、守備から2m以上離れてパスを受けられる選手を示します。一時停止すると、その瞬間の<b>攻めやすい場所</b>が緑で出ます（守備から遠く点になりやすい場所ほど濃い）。</p>
         <div class="legend">
           <span><svg width="14" height="14"><circle cx="7" cy="7" r="6" fill="#D9473A"/></svg>攻撃</span>
           <span><svg width="14" height="14"><circle cx="7" cy="7" r="6" fill="#2F6DB5"/></svg>守備</span>
@@ -555,7 +555,7 @@ body{font-size:15px}
           <span><svg width="24" height="10"><path d="M1 5h16" stroke="#17985A" stroke-width="2" stroke-dasharray="3 2"/><path d="M17 1l6 4-6 4z" fill="#17985A"/></svg>ねらい目へのパス</span>
           <span><svg width="24" height="10"><path d="M1 5h18" stroke="#26211C" stroke-dasharray="3 2.5" stroke-width="1.6"/></svg>パス</span>
           <span><svg width="18" height="12"><path d="M2 10L12 2M8 0.5l6 7" stroke="#26211C" stroke-width="1.8" fill="none"/></svg>スクリーン</span>
-          <label style="display:flex;align-items:center;gap:6px;margin-left:auto;cursor:pointer"><input type="checkbox" id="heat" checked style="accent-color:#17985A">攻めやすさを表示</label>
+          <label style="display:flex;align-items:center;gap:6px;margin-left:auto;cursor:pointer"><input type="checkbox" id="heat" checked style="accent-color:#17985A">止めた時に攻めやすさを表示</label>
           <span class="mini" style="margin:0;width:100%">表示を消すと、守備から2.2m以上離れた選手を緑の点線の輪で示します。</span>
         </div>
       </div>
@@ -633,7 +633,7 @@ body{font-size:15px}
 
 <script src="plays.js?v=20"></script>
 <script src="engine.js?v=20"></script>
-<script src="app.js?v=23"></script>
+<script src="app.js?v=24"></script>
 <script src="game.js?v=23"></script>
 <script src="scout.js?v=20"></script>
 </body>
