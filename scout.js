@@ -110,7 +110,7 @@ function sSum(){$('stabs').querySelectorAll('button').forEach(b=>b.classList.tog
     const top=rows[0];const best=rows.filter(r=>r.v>=2).sort((a,b)=>b.ppp-a.ppp)[0];const tp=prow[0];
     h+=`<div class="verdict">最も多い攻撃：<b>${esc(top.k)}</b>（${Math.round(top.v/o.length*100)}%）${best?`<br>最も点を取られている形：<b>${esc(best.k)}</b>（${best.ppp.toFixed(2)}点／回）`:''}${tp?`<br>得点源：<b>${esc(tp.k)}</b>（${tp.v}点）`:''}</div>`;
     const pos=o.filter(e=>e.x!=null&&shotOf(e.res));
-    if(pos.length)h+=`<div class="cap">シュートの位置</div><div class="chart"><svg viewBox="-0.4 -0.4 15.8 10.6">${courtSVG()}${pos.map(e=>{const ok=madeOf(e.res);return ok?`<circle cx="${BX(e.x)}" cy="${e.y}" r="0.28" fill="${C.acc}"/>`:`<path d="M${BX(e.x-0.22)} ${e.y-0.22}L${BX(e.x+0.22)} ${e.y+0.22}M${BX(e.x+0.22)} ${e.y-0.22}L${BX(e.x-0.22)} ${e.y+0.22}" stroke="${C.warn}" stroke-width="0.08"/>`}).join('')}</svg></div><div class="mixl"><span><i style="background:${C.acc}"></i>成功</span><span><i style="background:${C.warn}"></i>失敗</span></div>`;
+    if(pos.length)h+=`<div class="cap">シュートの位置</div><div class="chart"><svg viewBox="-0.4 -0.4 15.8 10.6">${courtSVG()}${pos.map(e=>{const ok=madeOf(e.res);return ok?`<circle cx="${BX(e.x)}" cy="${e.y}" r="0.3" fill="${C.go}" stroke="#fff" stroke-width="0.06"/>`:`<path d="M${BX(e.x-0.22)} ${e.y-0.22}L${BX(e.x+0.22)} ${e.y+0.22}M${BX(e.x+0.22)} ${e.y-0.22}L${BX(e.x-0.22)} ${e.y+0.22}" stroke="${C.warn}" stroke-width="0.08"/>`}).join('')}</svg></div><div class="mixl"><span><i style="background:${C.go}"></i>成功</span><span><i style="background:${C.warn}"></i>失敗</span></div>`;
     el.innerHTML=h;return}
   const d=SC.ev.filter(e=>e.side==='d');
   if(sTab==='d'){if(!d.length){el.innerHTML='<div class="empty">相手の守備を記録すると、ここに傾向が出ます</div>';return}

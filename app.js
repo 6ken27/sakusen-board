@@ -5,27 +5,29 @@
 const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const BX=x=>r2(x+7.5);
-const C={ink:'#ECE7DC',sub:'#8D929B',acc:'#E6B566',def:'#7EA6D8',warn:'#E28B70',bg:'#0E1116'};
+const C={ink:'#26211C',sub:'#6E665D',acc:'#E8742A',def:'#2F6DB5',off:'#D9473A',warn:'#D2483B',go:'#17985A',hl:'#F5C518',bg:'#FFFFFF'};
 const CATN={};CATS.forEach(c=>CATN[c.id]=c.name);CATN.my='マイ作戦';
 const KIND={run:'移動・カット',drib:'ドリブル',scr:'スクリーン'};
 let snackT=null;function snack(m){const s=$('snack');s.textContent=m;s.classList.add('on');clearTimeout(snackT);snackT=setTimeout(()=>s.classList.remove('on'),2200)}
 
-// ---------------- コート ----------------
+// ---------------- コート（木の床・塗ったペイントエリア・白いライン） ----------------
 function courtSVG(){
-  const ln='rgba(236,231,220,.42)';const yj=r2(HOOP.y+Math.sqrt(6.75**2-6.6**2));
-  return `<rect x="-0.4" y="-0.4" width="15.8" height="14.8" fill="#151a21"/><rect x="0" y="0" width="15" height="14" fill="#1b2028"/>`+
-  `<rect x="${BX(-2.45)}" y="0" width="4.9" height="5.8" fill="#202734"/>`+
-  `<g fill="none" stroke="${ln}" stroke-width="0.06"><rect x="0" y="0" width="15" height="14"/><rect x="${BX(-2.45)}" y="0" width="4.9" height="5.8"/>`+
+  const ln='rgba(255,255,255,.95)';const yj=r2(HOOP.y+Math.sqrt(6.75**2-6.6**2));
+  return `<defs><pattern id="wood" width="1.2" height="3.6" patternUnits="userSpaceOnUse"><rect width="1.2" height="3.6" fill="#E4BE8E"/><rect x="0.6" width="0.6" height="3.6" fill="#DFB784"/><path d="M0 0V3.6M0.6 1.8V3.6M0.6 0V0.9" stroke="rgba(120,78,40,.13)" stroke-width="0.02"/></pattern>`+
+  `<filter id="hb" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="0.32"/></filter></defs>`+
+  `<rect x="-0.4" y="-0.4" width="15.8" height="14.8" fill="#B57E52"/><rect x="0" y="0" width="15" height="14" fill="url(#wood)"/>`+
+  `<rect x="${BX(-2.45)}" y="0" width="4.9" height="5.8" fill="#C9895A" opacity="0.92"/>`+
+  `<g fill="none" stroke="${ln}" stroke-width="0.07"><rect x="0" y="0" width="15" height="14"/><rect x="${BX(-2.45)}" y="0" width="4.9" height="5.8"/>`+
   `<path d="M${BX(-1.8)} 5.8A1.8 1.8 0 0 0 ${BX(1.8)} 5.8"/><path d="M${BX(-1.8)} 5.8A1.8 1.8 0 0 1 ${BX(1.8)} 5.8" stroke-dasharray="0.3 0.25"/>`+
   `<path d="M${BX(-6.6)} 0V${yj}A6.75 6.75 0 0 0 ${BX(6.6)} ${yj}V0"/><path d="M${BX(-1.25)} ${HOOP.y}A1.25 1.25 0 0 0 ${BX(1.25)} ${HOOP.y}"/>`+
   `<path d="M${BX(-1.8)} 14A1.8 1.8 0 0 1 ${BX(1.8)} 14"/></g>`+
-  `<line x1="${BX(-0.9)}" y1="1.2" x2="${BX(0.9)}" y2="1.2" stroke="rgba(236,231,220,.75)" stroke-width="0.1"/>`+
-  `<circle cx="7.5" cy="${HOOP.y}" r="0.23" fill="none" stroke="${C.acc}" stroke-width="0.07"/>`;
+  `<line x1="${BX(-0.9)}" y1="1.2" x2="${BX(0.9)}" y2="1.2" stroke="#fff" stroke-width="0.12"/>`+
+  `<circle cx="7.5" cy="${HOOP.y}" r="0.23" fill="none" stroke="#E0562B" stroke-width="0.08"/>`;
 }
 function tx(x,y,str,size,attrs){return `<text x="${Math.round(x*100)}" y="${Math.round(y*100)}" font-size="${Math.round(size*100)}" transform="scale(0.01)" text-anchor="middle" class="tk" ${attrs||''}>${str}</text>`}
-function offTok(p,n,o){o=o||{};const r=o.r||0.43;return `<g transform="translate(${BX(p.x)} ${r2(p.y)})"${o.op?` opacity="${o.op}"`:''}><circle r="${r}" fill="${C.ink}"/>${o.noNum?'':tx(0,r*0.37,n,r*1.08,`font-weight="700" fill="${C.bg}"`)}</g>`}
-function defTok(p,n,off,stun){const c=off?C.acc:C.def;return `<g transform="translate(${BX(p.x)} ${r2(p.y)})"><circle r="0.4" fill="${C.bg}" stroke="${c}" stroke-width="0.09"/>${tx(0,0.15,n,0.4,`font-weight="700" fill="${c}"`)}${stun?tx(0.42,-0.28,'!',0.56,`font-weight="900" fill="${C.acc}"`):''}</g>`}
-function ballTok(x,y,r){return `<circle cx="${BX(x)}" cy="${r2(y)}" r="${r||0.19}" fill="#E8833A" stroke="#5a2b08" stroke-width="0.035"/>`}
+function offTok(p,n,o){o=o||{};const r=o.r||0.43;return `<g transform="translate(${BX(p.x)} ${r2(p.y)})"${o.op?` opacity="${o.op}"`:''}><circle cx="0.04" cy="0.06" r="${r}" fill="rgba(60,30,10,.25)"/><circle r="${r}" fill="${C.off}" stroke="#fff" stroke-width="0.06"/>${o.noNum?'':tx(0,r*0.37,n,r*1.08,`font-weight="700" fill="#fff"`)}</g>`}
+function defTok(p,n,off,stun){return `<g transform="translate(${BX(p.x)} ${r2(p.y)})"><circle cx="0.04" cy="0.06" r="0.41" fill="rgba(60,30,10,.25)"/><circle r="0.41" fill="${C.def}" stroke="${off?C.hl:'#fff'}" stroke-width="${off?0.13:0.06}"/>${tx(0,0.15,n,0.42,`font-weight="700" fill="#fff"`)}${stun?tx(0.44,-0.26,'!',0.6,`font-weight="900" fill="${C.hl}" stroke="${C.ink}" stroke-width="7" paint-order="stroke"`):''}</g>`}
+function ballTok(x,y,r){r=r||0.2;const cx=BX(x),cy=r2(y);return `<g><circle cx="${cx}" cy="${cy}" r="${r}" fill="#E8742A" stroke="#4A230A" stroke-width="0.035"/><path d="M${r2(cx-r)} ${cy}H${r2(cx+r)}M${cx} ${r2(cy-r)}V${r2(cy+r)}" stroke="#4A230A" stroke-width="0.025"/></g>`}
 
 // ---------------- 作戦図の記号 ----------------
 function pd(pts){return pts.map((p,i)=>(i?'L':'M')+BX(p.x)+' '+r2(p.y)).join('')}
@@ -51,12 +53,12 @@ function phasePositions(play,phMv){const out=[];const pos={};for(const k in play
   out.push({pos:Object.assign({},pos),hold});return out}
 function phaseSVG(st,ph,mv,c,w){let h='';mv=mv||getMv(ph);
   for(const k in mv){const m=mv[k];if(!m.p||!m.p.length||!st.pos[k])continue;h+=moveSVG([st.pos[k]].concat(m.p.map(q=>V(q[0],q[1]))),m.k||'run',c,w)}
-  if(ph&&ph.pass&&st.pos[ph.pass[0]]){const end=phEnd(st,mv);h+=passSVG(end[ph.pass[0]],end[ph.pass[1]],C.acc,w)}
+  if(ph&&ph.pass&&st.pos[ph.pass[0]]){const end=phEnd(st,mv);h+=passSVG(end[ph.pass[0]],end[ph.pass[1]],C.ink,w)}
   return h}
 function phEnd(st,mv){const e=Object.assign({},st.pos);for(const k in mv){const p=mv[k].p;if(p&&p.length)e[k]=V(p[p.length-1][0],p[p.length-1][1])}return e}
 function thumbSVG(play){const PP=phasePositions(play);let h=courtSVG();const n=play.phases.length;
   play.phases.forEach((ph,i)=>{h+=`<g opacity="${r2(0.45+0.55*(i+1)/n)}">${phaseSVG(PP[i],ph,null,C.ink,0.13)}</g>`});
-  for(const k in play.start){const p=PP[0].pos[k];h+=`<circle cx="${BX(p.x)}" cy="${r2(p.y)}" r="0.55" fill="${k===play.ball?C.acc:C.ink}"/>`}
+  for(const k in play.start){const p=PP[0].pos[k];h+=`<circle cx="${BX(p.x)}" cy="${r2(p.y)}" r="0.58" fill="${C.off}" stroke="#fff" stroke-width="0.1"/>`+(k===play.ball?`<circle cx="${BX(p.x+0.55)}" cy="${r2(p.y-0.55)}" r="0.32" fill="#E8742A"/>`:'')}
   return `<svg viewBox="-0.4 -0.4 15.8 10.6" preserveAspectRatio="xMidYMid slice">${h}</svg>`}
 function stepSVG(play,i,phMv){const PP=phasePositions(play,phMv);let h=courtSVG();
   for(let j=0;j<i;j++)h+=`<g opacity="0.22">${phaseSVG(PP[j],play.phases[j],phMv&&phMv[j],C.ink,0.12)}</g>`;
@@ -68,33 +70,58 @@ function stepSVG(play,i,phMv){const PP=phasePositions(play,phMv);let h=courtSVG(
 // ---------------- 再生用の描画 ----------------
 function ensureCourt(el){if(!el._court){el.innerHTML=courtSVG()+'<g class="dyn"></g>';el._court=true}return el.querySelector('.dyn')}
 function frameIdx(res,t){const fr=res.frames;let lo=0,hi=fr.length-1;while(lo<hi){const m=(lo+hi+1)>>1;if(fr[m].t<=t)lo=m;else hi=m-1}return lo}
+// 場所の価値（ゴール下と3Pラインの外が高く、ミドルは低い）
+function locVal(p){const r=dist(p,HOOP);if(r<1.8)return 1;if(r<4.3)return 0.62;if(!is3(p))return 0.42;return r<8.4?0.88:0.25}
+// 攻めやすさの地図：守備から離れていて、点になりやすい場所ほど濃い緑
+function heatSVG(f){const ds=Object.values(f.d);if(!ds.length)return '';let h='';const st=0.7;
+  for(let x=-7.15;x<=7.2;x+=st)for(let y=0.35;y<=10.4;y+=st){const p=V(x,y);let m=99;for(const d of ds){const dd=Math.hypot(d[0]-x,d[1]-y);if(dd<m)m=dd}
+    const v=locVal(p)*clamp((m-1.1)/2.4,0,1);if(v>0.12)h+=`<rect x="${BX(x-st/2)}" y="${r2(y-st/2)}" width="${st}" height="${st}" fill="${C.go}" opacity="${r2(v*0.55)}"/>`}
+  return `<g filter="url(#hb)">${h}</g>`}
+// 「ここ！」の吹き出し
+function bubble(p,title,subt){const w=Math.max(title.length*0.4,(subt||'').length*0.3)+0.7,hh=subt?1.12:0.7;
+  let y=p.y-0.78-hh;let below=false;if(y<0.05){y=p.y+0.78;below=true}
+  const x=clamp(p.x-w/2,-7.4,7.4-w);const tipY=below?y:y+hh;const tipDir=below?-0.28:0.28;
+  return `<g><path d="M${BX(p.x-0.2)} ${r2(tipY)}L${BX(p.x)} ${r2(tipY+tipDir)}L${BX(p.x+0.2)} ${r2(tipY)}Z" fill="${C.go}"/><rect x="${BX(x)}" y="${r2(y)}" width="${r2(w)}" height="${hh}" rx="0.28" fill="${C.go}"/>`+
+    tx(BX(x+w/2),y+0.5,esc(title),0.38,'font-weight="800" fill="#fff"')+(subt?tx(BX(x+w/2),y+0.92,esc(subt),0.27,'fill="#E8FFF1"'):'')+`</g>`}
+function chance(res,f){
+  // これから起きる判断（パス・シュート）を先に知らせる
+  for(const l of res.log){if(l.lv!==2||l.t<f.t-0.2||l.t>f.t+0.8)continue;let m;
+    if((m=l.msg.match(/^(\d)→(\d) (\S+?)(?:｜([^｜]+))?｜/))){const dm=l.msg.match(/守備まで([\d.]+)m/);if(!dm||+dm[1]<2.0)continue;const why=m[4]&&!/守備まで/.test(m[4])?m[4]:m[3];return {to:'O'+m[2],from:'O'+m[1],title:'ここが空く！',sub:why}}
+    if((m=l.msg.match(/^シュート：(\d) (\S+)/))&&l.msg.includes('ノーマーク'))return {to:'O'+m[1],title:'ここで打てる！',sub:m[2]}}
+  return null}
 function renderBoard(el,res,idx,o){o=o||{};const dyn=ensureCourt(el);const fr=res.frames;const f=fr[idx];if(!f){dyn.innerHTML='';return}
-  let h='';const P=k=>V(f.o[k][0],f.o[k][1]);
+  let h='';const P=k=>V(f.o[k][0],f.o[k][1]);const ended=idx>=fr.length-1;
+  const heat=o.heat!==false&&!res.noDef&&!f.sh&&!ended&&(!$('heat')||$('heat').checked);
+  if(heat)h+=heatSVG(f);
   // 予定の動き（いまのコマ）
   if(o.plan!==false&&f.ph<res.play.phases.length&&res.phStart[f.ph]!=null){const si=frameIdx(res,res.phStart[f.ph]);const sf=fr[si];
     const st={pos:{}};for(const k in sf.o)st.pos[k]=V(sf.o[k][0],sf.o[k][1]);
-    h+=`<g opacity="0.26">${phaseSVG(st,res.play.phases[f.ph],res.phMv[f.ph],C.ink,0.08)}</g>`}
+    h+=`<g opacity="0.32">${phaseSVG(st,res.play.phases[f.ph],res.phMv[f.ph],C.ink,0.08)}</g>`}
   // 動いた跡
-  const tr=(get,c)=>{const pts=[];for(let i=Math.max(0,idx-40);i<=idx;i+=3)pts.push(get(fr[i]));pts.push(get(f));if(pts.length>2)h+=`<path d="${pd(pts)}" stroke="${c}" stroke-width="0.06" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`};
-  for(const k in f.o)tr(x=>V(x.o[k][0],x.o[k][1]),'rgba(236,231,220,.26)');
-  for(const id in f.d)tr(x=>V(x.d[id][0],x.d[id][1]),'rgba(126,166,216,.24)');
+  const tr=(get,c)=>{const pts=[];for(let i=Math.max(0,idx-40);i<=idx;i+=3)pts.push(get(fr[i]));pts.push(get(f));if(pts.length>2)h+=`<path d="${pd(pts)}" stroke="${c}" stroke-width="0.07" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`};
+  for(const k in f.o)tr(x=>V(x.o[k][0],x.o[k][1]),'rgba(217,71,58,.38)');
+  for(const id in f.d)tr(x=>V(x.d[id][0],x.d[id][1]),'rgba(47,109,181,.32)');
   // マークの線
-  if(!res.zone&&!res.noDef)for(const id in f.d){const d=f.d[id];const t=P(d[4]);h+=`<path d="M${BX(d[0])} ${d[1]}L${BX(t.x)} ${r2(t.y)}" stroke="${d[2]?'rgba(230,181,102,.5)':'rgba(126,166,216,.3)'}" stroke-width="0.04" stroke-dasharray="0.14 0.12"/>`}
+  if(!res.zone&&!res.noDef)for(const id in f.d){const d=f.d[id];const t=P(d[4]);h+=`<path d="M${BX(d[0])} ${d[1]}L${BX(t.x)} ${r2(t.y)}" stroke="${d[2]?'rgba(245,197,24,.9)':'rgba(47,109,181,.45)'}" stroke-width="0.045" stroke-dasharray="0.14 0.12"/>`}
   // スクリーン
   const hk=f.h||(f.fl?f.fl[1]:null);
-  for(const k of f.scr){const p=P(k);const to=hk&&f.o[hk]?P(hk):HOOP;const d=unit(sub(to,p));const n=V(-d.y,d.x);h+=`<path d="${pd([add(p,mul(n,0.62)),add(p,mul(n,-0.62))])}" stroke="${C.ink}" stroke-width="0.15" stroke-linecap="round"/>`}
-  // ノーマーク
-  const ended=idx>=fr.length-1;
-  if(!res.noDef&&!f.sh&&!ended)for(const k in f.o){if(k===f.h)continue;const p=P(k);let m=99;for(const id in f.d){const dd=Math.hypot(f.d[id][0]-p.x,f.d[id][1]-p.y);if(dd<m)m=dd}
-    if(m>=2.2){h+=`<circle cx="${BX(p.x)}" cy="${r2(p.y)}" r="0.9" fill="none" stroke="${C.acc}" stroke-width="0.05" stroke-dasharray="0.18 0.14"/>${tx(BX(p.x),p.y-1.06,m.toFixed(1)+'m',0.34,`font-weight="700" fill="${C.acc}"`)}`}}
+  for(const k of f.scr){const p=P(k);const to=hk&&f.o[hk]?P(hk):HOOP;const d=unit(sub(to,p));const n=V(-d.y,d.x);h+=`<path d="${pd([add(p,mul(n,0.62)),add(p,mul(n,-0.62))])}" stroke="${C.ink}" stroke-width="0.16" stroke-linecap="round"/>`}
+  // 地図を消している時は、ノーマークを輪で示す
+  if(!heat&&!res.noDef&&!f.sh&&!ended)for(const k in f.o){if(k===f.h)continue;const p=P(k);let m=99;for(const id in f.d){const dd=Math.hypot(f.d[id][0]-p.x,f.d[id][1]-p.y);if(dd<m)m=dd}
+    if(m>=2.2)h+=`<circle cx="${BX(p.x)}" cy="${r2(p.y)}" r="0.9" fill="none" stroke="${C.go}" stroke-width="0.06" stroke-dasharray="0.18 0.14"/>`}
   // パス・シュート
-  if(f.fl&&f.o[f.fl[1]]){const to=P(f.fl[1]);h+=`<path d="M${BX(f.fl[2])} ${f.fl[3]}L${BX(to.x)} ${r2(to.y)}" stroke="${C.acc}" stroke-width="0.06" stroke-dasharray="0.26 0.2"/>`}
-  if(f.sh){const s=V(f.sh[0],f.sh[1]);h+=`<path d="M${BX(s.x)} ${s.y}Q${r2((BX(s.x)+7.5)/2)} ${r2(Math.min(s.y,HOOP.y)-1.4)} 7.5 ${HOOP.y}" stroke="${C.acc}" stroke-width="0.05" fill="none" stroke-dasharray="0.12 0.14"/>`}
+  if(f.fl&&f.o[f.fl[1]]){const to=P(f.fl[1]);h+=`<path d="M${BX(f.fl[2])} ${f.fl[3]}L${BX(to.x)} ${r2(to.y)}" stroke="${C.ink}" stroke-width="0.07" stroke-dasharray="0.26 0.2"/>`}
+  if(f.sh){const s=V(f.sh[0],f.sh[1]);h+=`<path d="M${BX(s.x)} ${s.y}Q${r2((BX(s.x)+7.5)/2)} ${r2(Math.min(s.y,HOOP.y)-1.4)} 7.5 ${HOOP.y}" stroke="${C.acc}" stroke-width="0.06" fill="none" stroke-dasharray="0.12 0.14"/>`}
+  // 攻めどころ
+  let ch=null;if(!res.noDef&&!ended&&!f.sh&&o.chance!==false)ch=chance(res,f);
+  if(ch&&f.o[ch.to]){const p=P(ch.to);const r=0.72+0.12*Math.sin(f.t*9);h+=`<circle cx="${BX(p.x)}" cy="${r2(p.y)}" r="${r2(r)}" fill="rgba(23,152,90,.18)" stroke="${C.go}" stroke-width="0.09"/>`;
+    const fromK=ch.from||f.h;if(fromK&&fromK!==ch.to&&f.o[fromK]&&!f.fl){const a=P(fromK);const d=unit(sub(p,a));const a2=add(a,mul(d,0.6)),b2=add(p,mul(d,-0.85));if(dist(a,p)>1.8)h+=`<path d="${pd([a2,b2])}" stroke="${C.go}" stroke-width="0.09" stroke-dasharray="0.3 0.18"/>`+head(add(b2,mul(d,-0.3)),b2,C.go,0.38)}}
   // 選手
   for(const id in f.d){const d=f.d[id];h+=defTok(V(d[0],d[1]),NUM(id),d[2],d[3])}
   for(const k in f.o)h+=offTok(P(k),NUM(k));
   // ボール
-  if(f.h&&f.o[f.h]){const p=P(f.h);h+=ballTok(p.x+0.32,p.y-0.32)}else h+=ballTok(f.b[0],f.b[1]-f.b[2]);
+  if(f.h&&f.o[f.h]){const p=P(f.h);h+=ballTok(p.x+0.34,p.y-0.34)}else h+=ballTok(f.b[0],f.b[1]-f.b[2],0.2+f.b[2]*0.05);
+  if(ch&&f.o[ch.to])h+=bubble(P(ch.to),ch.title,ch.sub);
   dyn.innerHTML=h;
 }
 
@@ -134,6 +161,8 @@ function renderLib(){
   $('list').innerHTML=items.map((p,i)=>rowHTML(p,q&&i===0?'おすすめ':'')).join('');
 }
 $('q').addEventListener('input',renderLib);
+if(localStorage.getItem('sakusen.v2.guide')==='off')$('guide').style.display='none';
+$('guidex').onclick=()=>{$('guide').style.display='none';try{localStorage.setItem('sakusen.v2.guide','off')}catch(e){}};
 $('qx').onclick=e=>{e.preventDefault();$('q').value='';renderLib();$('q').focus()};
 $('cats').onclick=e=>{const b=e.target.closest('button');if(!b)return;libCat=b.dataset.c;$('q').value='';renderLib()};
 $('list').onclick=e=>{const b=e.target.closest('.row');if(b)go('/p/'+encodeURIComponent(b.dataset.id))};
@@ -214,6 +243,7 @@ $('pplay').onclick=()=>{if(PB.playing)pbPause();else pbPlay()};
 $('prestart').onclick=()=>{PB.t=0;pbDraw();pbPlay()};
 $('pagain').onclick=()=>{PB.seed=(PB.seed*7919+13)%100000+1;pbRun(true)};
 ['sdef','scov','slvl'].forEach(id=>$(id).onchange=()=>{if(id==='sdef')PB.opt.def=$('sdef').value;if(id==='scov')PB.opt.cov=$('scov').value;if(id==='slvl')PB.opt.level=+$('slvl').value;syncCov();$('an').innerHTML=anIntro();pbRun(true)});
+$('heat').onchange=()=>pbDraw();
 $('pspeed').onclick=e=>{const b=e.target.closest('button');if(!b)return;PB.speed=+b.dataset.v;$('pspeed').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b))};
 $('pback').onclick=()=>go(PB.from==='lib'?'/':PB.from==='scout'?(window.__scoutBack||'/scout'):'/'+PB.from);
 $('pedit').onclick=()=>{edFromPlay(PB.play);go('/edit')};
@@ -253,8 +283,8 @@ async function runAnalysis(){if(anBusy)return;anBusy=true;const play=PB.play;con
   h+=`<div class="cap">シュートを打った選手</div><div class="bars">${byP.map(([k,n])=>`<div class="bar1"><span>${NUM(k)}</span><div class="tr"><i style="width:${n/tot*100}%"></i></div><span class="v">${Math.round(n/tot*100)}%</span></div>`).join('')}</div>`;
   const ks=Object.entries(s.kinds).sort((a,b)=>b[1]-a[1]).slice(0,6);
   h+=`<div class="cap">シュートの種類</div><div class="bars">${ks.map(([k,n])=>`<div class="bar1"><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(k)}</span><div class="tr"><i style="width:${n/tot*100}%" class="acc"></i></div><span class="v">${n}回</span></div>`).join('')}</div>`;
-  h+=`<div class="cap">シュートの位置</div><div class="chart"><svg viewBox="-0.4 -0.4 15.8 10.6">${courtSVG()}${s.shots.map(x=>{const c=x.open>=2.2?C.acc:x.open>=1.3?C.ink:C.warn;return `<circle cx="${BX(x.pos.x)}" cy="${r2(x.pos.y)}" r="0.26" fill="${c}" opacity="0.85"/>`}).join('')}</svg></div>
-  <div class="mixl"><span><i style="background:${C.acc}"></i>ノーマーク</span><span><i style="background:${C.ink}"></i>少し余裕あり</span><span><i style="background:${C.warn}"></i>守備が目の前</span></div>
+  h+=`<div class="cap">シュートの位置</div><div class="chart"><svg viewBox="-0.4 -0.4 15.8 10.6">${courtSVG()}${s.shots.map(x=>{const c=x.open>=2.2?C.go:x.open>=1.3?C.acc:C.warn;return `<circle cx="${BX(x.pos.x)}" cy="${r2(x.pos.y)}" r="0.26" fill="${c}" opacity="0.85"/>`}).join('')}</svg></div>
+  <div class="mixl"><span><i style="background:${C.go}"></i>ノーマーク</span><span><i style="background:${C.acc}"></i>少し余裕あり</span><span><i style="background:${C.warn}"></i>守備が目の前</span></div>
   <p class="mini">期待得点＝シュートの成功率×点数の平均。ターンオーバー、ファウル、リバウンドは含みません。成功率は守備との距離とシュートの種類から見積もっています。</p>`;
   $('anres').innerHTML=h;setTimeout(()=>prog.classList.remove('on'),400);anBusy=false}
 
@@ -330,7 +360,7 @@ function edStopPreview(){if(!E.prev)return;cancelAnimationFrame(E.prev.raf);E.pr
 function edRender(){if(E.prev)return;const svg=$('ed');svg._court=false;const p=E.p;const PP=phasePositions(p);const st=PP[E.cur];let h=courtSVG();
   for(let j=0;j<E.cur;j++)h+=`<g opacity="0.2">${phaseSVG(PP[j],p.phases[j],null,C.ink,0.08)}</g>`;
   h+=phaseSVG(st,p.phases[E.cur],null,C.ink,0.09);
-  const mv=p.phases[E.cur].mv||{};for(const k in mv){const q=mv[k].p;if(q&&q.length){const e=q[q.length-1];h+=`<circle cx="${BX(e[0])}" cy="${e[1]}" r="0.36" fill="none" stroke="rgba(236,231,220,.45)" stroke-width="0.05" stroke-dasharray="0.12 0.1"/>`}}
+  const mv=p.phases[E.cur].mv||{};for(const k in mv){const q=mv[k].p;if(q&&q.length){const e=q[q.length-1];h+=`<circle cx="${BX(e[0])}" cy="${e[1]}" r="0.36" fill="none" stroke="rgba(38,33,28,.55)" stroke-width="0.05" stroke-dasharray="0.12 0.1"/>`}}
   if(E.stroke&&E.stroke.pts.length>1)h+=`<path d="${pd(E.stroke.pts)}" stroke="${C.acc}" stroke-width="0.1" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
   for(const k in st.pos)h+=offTok(st.pos[k],NUM(k));
   const hp=st.pos[st.hold];if(hp)h+=ballTok(hp.x+0.32,hp.y-0.32);

@@ -1,5 +1,5 @@
 // オフラインでも使えるように、アプリのファイルを端末に保存する
-const CACHE = 'sakusen-board-v5';
+const CACHE = 'sakusen-board-v6';
 const FILES = ['./', './index.html', './plays.js', './engine.js', './app.js', './game.js', './scout.js', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
