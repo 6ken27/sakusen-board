@@ -75,7 +75,7 @@ function locVal(p){const r=dist(p,HOOP);if(r<1.8)return 1;if(r<4.3)return 0.62;i
 // 攻めやすさの地図：守備から離れていて、点になりやすい場所ほど濃い緑
 function heatSVG(f){const ds=Object.values(f.d);if(!ds.length)return '';let h='';const st=0.7;
   for(let x=-7.15;x<=7.2;x+=st)for(let y=0.35;y<=10.4;y+=st){const p=V(x,y);let m=99;for(const d of ds){const dd=Math.hypot(d[0]-x,d[1]-y);if(dd<m)m=dd}
-    const v=locVal(p)*clamp((m-1.1)/2.4,0,1);if(v>0.12)h+=`<rect x="${BX(x-st/2)}" y="${r2(y-st/2)}" width="${st}" height="${st}" fill="${C.go}" opacity="${r2(v*0.55)}"/>`}
+    const v=locVal(p)*clamp((m-1.1)/2.4,0,1);if(v>0.35)h+=`<rect x="${BX(x-st/2)}" y="${r2(y-st/2)}" width="${st}" height="${st}" fill="${C.go}" opacity="${r2((v-0.25)*0.5)}"/>`}
   return `<g filter="url(#hb)">${h}</g>`}
 // 「ここ！」の吹き出し
 function bubble(p,title,subt){const w=Math.max(title.length*0.4,(subt||'').length*0.3)+0.7,hh=subt?1.12:0.7;
@@ -91,7 +91,7 @@ function chance(res,f){
   return null}
 function renderBoard(el,res,idx,o){o=o||{};const dyn=ensureCourt(el);const fr=res.frames;const f=fr[idx];if(!f){dyn.innerHTML='';return}
   let h='';const P=k=>V(f.o[k][0],f.o[k][1]);const ended=idx>=fr.length-1;
-  const heat=o.heat!==false&&!res.noDef&&!f.sh&&!ended&&(!$('heat')||$('heat').checked);
+  const heat=o.heat!==false&&!o.playing&&!res.noDef&&!f.sh&&!ended&&(!$('heat')||$('heat').checked);
   if(heat)h+=heatSVG(f);
   // 予定の動き（いまのコマ）
   if(o.plan!==false&&f.ph<res.play.phases.length&&res.phStart[f.ph]!=null){const si=frameIdx(res,res.phStart[f.ph]);const sf=fr[si];
@@ -209,9 +209,9 @@ function syncCov(){$('scov').disabled=$('sdef').value==='zone'}
 function simOpt(){return {seed:PB.seed,def:PB.play.zone?'zone':$('sdef').value,cov:$('scov').value,level:+$('slvl').value}}
 function pbRun(auto){pbPause();PB.res=simulate(PB.play,simOpt());PB.t=0;PB.fi=-1;PB.li=-2;buildFlow();buildSteps();buildMarks();pbDraw();if(auto)pbPlay()}
 function pbPlay(){if(!PB.res)return;if(PB.t>=PB.res.dur-0.01){PB.t=0}PB.playing=true;PB.last=performance.now();$('pplay').innerHTML=ICON_PAUSE;cancelAnimationFrame(PB.raf);PB.raf=requestAnimationFrame(pbLoop)}
-function pbPause(){PB.playing=false;cancelAnimationFrame(PB.raf);$('pplay').innerHTML=ICON_PLAY}
+function pbPause(){PB.playing=false;cancelAnimationFrame(PB.raf);$('pplay').innerHTML=ICON_PLAY;if(PB.res&&curView==='play')pbDraw()}
 function pbLoop(now){if(!PB.playing)return;const dt=Math.min(0.05,(now-PB.last)/1000);PB.last=now;PB.t=Math.min(PB.res.dur,PB.t+dt*PB.speed);pbDraw();if(PB.t>=PB.res.dur){pbPause();return}PB.raf=requestAnimationFrame(pbLoop)}
-function pbDraw(){const res=PB.res;const idx=frameIdx(res,PB.t);renderBoard($('bd'),res,idx);
+function pbDraw(){const res=PB.res;const idx=frameIdx(res,PB.t);renderBoard($('bd'),res,idx,{playing:PB.playing});
   const r=PB.t/res.dur;$('tfill').style.width=(r*100)+'%';$('tknob').style.left=(r*100)+'%';
   $('ptime').textContent=PB.t.toFixed(1)+' / '+res.dur.toFixed(1)+'秒';
   const end=PB.t>=res.dur-0.02;
